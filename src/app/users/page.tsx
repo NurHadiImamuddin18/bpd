@@ -11,6 +11,7 @@ import { UserPlus } from "lucide-react";
 export default function UsersPage() {
   const { users } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ nama: "", username: "", password: "", role: "User" });
 
@@ -19,12 +20,14 @@ export default function UsersPage() {
   const openAddModal = () => {
     setEditingId(null);
     setForm({ nama: "", username: "", password: "", role: "User" });
+    setSuccessMsg("");
     setIsModalOpen(true);
   };
 
   const openEditModal = (item: UserItem) => {
     setEditingId(item.id);
     setForm({ nama: item.nama, username: item.username, password: item.password, role: item.role });
+    setSuccessMsg("");
     setIsModalOpen(true);
   };
 
@@ -50,12 +53,15 @@ export default function UsersPage() {
           createdAt: new Date().toISOString(),
         });
       }
+      setSuccessMsg("Data berhasil tersimpan");
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setForm({ nama: "", username: "", password: "", role: "User" });
+        setEditingId(null);
+        setSuccessMsg("");
+      }, 1500);
     } catch {
       alert("Gagal menyimpan staf.");
-    } finally {
-      setIsModalOpen(false);
-      setForm({ nama: "", username: "", password: "", role: "User" });
-      setEditingId(null);
     }
   };
 
@@ -101,6 +107,11 @@ export default function UsersPage() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingId ? "Edit User" : "Tambah User Baru"}>
+        {successMsg && (
+          <div style={{ background: "#dcfce3", color: "#166534", padding: "12px", borderRadius: "8px", marginBottom: "16px", textAlign: "center", fontSize: "14px", fontWeight: 600 }}>
+            {successMsg}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="form-grid">
           <div>
             <label>Nama Lengkap</label>

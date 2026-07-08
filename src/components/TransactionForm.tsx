@@ -40,13 +40,15 @@ export default function TransactionForm({ tipe }: TransactionFormProps) {
     return "Laporan Rusak";
   };
 
+  const [successMsg, setSuccessMsg] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedItem) return alert("Pilih logistik terlebih dahulu!");
     setLoading(true);
 
     try {
-      const qty = Number(form.jumlah);
+      const qty = Number(form.jumlah.replace(/\./g, ""));
       if ((tipe === "keluar" || tipe === "rusak") && selectedItem.stokTersedia < qty) {
         alert("Stok fisik tidak mencukupi!");
         setLoading(false);
@@ -76,9 +78,12 @@ export default function TransactionForm({ tipe }: TransactionFormProps) {
 
       await addDoc(collection(db, "transactions"), payload);
 
-      setForm({ itemId: "", jumlah: "", pelaku: "", penerima: "", keterangan: "", tanggal: new Date().toISOString().slice(0, 16) });
-      setSelectedItem(null);
-      alert(`${getActionName()} berhasil dicatat!`);
+      setSuccessMsg(`${getActionName()} berhasil dicatat!`);
+      setTimeout(() => {
+        setForm({ itemId: "", jumlah: "", pelaku: "", penerima: "", keterangan: "", tanggal: new Date().toISOString().slice(0, 16) });
+        setSelectedItem(null);
+        setSuccessMsg("");
+      }, 1500);
     } catch {
       alert("Gagal menyimpan transaksi.");
     } finally {
@@ -86,8 +91,19 @@ export default function TransactionForm({ tipe }: TransactionFormProps) {
     }
   };
 
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
+    const val = e.target.value.replace(/\D/g, "");
+    const formatted = val ? new Intl.NumberFormat("id-ID").format(Number(val)) : "";
+    set(key, formatted);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="form-grid">
+      {successMsg && (
+        <div style={{ background: "#dcfce3", color: "#166534", padding: "12px", borderRadius: "8px", marginBottom: "16px", textAlign: "center", fontSize: "14px", fontWeight: 600 }}>
+          {successMsg}
+        </div>
+      )}
       <div>
         <label>Pilih Logistik</label>
         <select required value={form.itemId} onChange={handleItemSelect}>
@@ -109,13 +125,13 @@ export default function TransactionForm({ tipe }: TransactionFormProps) {
 
       <div>
         <label>Jumlah</label>
-        <input type="number" value={form.jumlah} onChange={(e) => set("jumlah", e.target.value)} required min="1" />
+        <input type="text" value={form.jumlah} onChange={(e) => handleNumberChange(e, "jumlah")} required placeholder="100" />
       </div>
 
-      {selectedItem && form.jumlah && Number(form.jumlah) > 0 && (
+      {selectedItem && form.jumlah && Number(form.jumlah.replace(/\./g, "")) > 0 && (
         <div style={{ padding: "10px", background: "var(--bg-subtle)", borderRadius: "8px", border: "1px solid var(--border)", display: "flex", justifyContent: "space-between", fontSize: "13px" }}>
           <span style={{ fontWeight: 600 }}>Total Estimasi Nilai:</span>
-          <span style={{ fontWeight: 700, color: "var(--fg-dark)" }}>{formatRp(selectedItem.hargaSatuan * Number(form.jumlah))}</span>
+          <span style={{ fontWeight: 700, color: "var(--fg-dark)" }}>{formatRp(selectedItem.hargaSatuan * Number(form.jumlah.replace(/\./g, "")))}</span>
         </div>
       )}
 
