@@ -9,8 +9,8 @@ interface SuccessAlertProps {
 export default function SuccessAlert({ message }: SuccessAlertProps) {
   return (
     <div style={{
-      background: "#f0fdf4",
-      border: "1px solid #bbf7d0",
+      background: "#ecfdf3f1",
+      border: "1px solid #12b76a",
       borderRadius: "8px",
       padding: "14px 18px",
       marginBottom: "20px",
@@ -19,7 +19,7 @@ export default function SuccessAlert({ message }: SuccessAlertProps) {
       gap: "12px",
     }}>
       <div style={{
-        background: "#22c55e",
+        background: "#12b76a",
         borderRadius: "50%",
         width: "28px",
         height: "28px",
