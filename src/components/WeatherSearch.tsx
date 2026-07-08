@@ -165,19 +165,14 @@ export default function WeatherSearch() {
                 {getScene(weatherData.weather_code)}
               </div>
 
-              {/* Weather Data Glass Card */}
+              {/* Weather Data */}
               <div style={{ position: "absolute", inset: 0, zIndex: 3, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", pointerEvents: "none" }}>
                 <div style={{ 
-                  background: "rgba(255, 255, 255, 0.7)", 
-                  backdropFilter: "blur(8px)", 
                   padding: "24px", 
-                  borderRadius: "16px", 
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.1)", 
                   display: "flex", 
                   flexDirection: "column", 
                   alignItems: "center",
                   minWidth: "240px",
-                  border: "1px solid rgba(255,255,255,0.4)",
                   pointerEvents: "auto"
                 }}>
                   <div style={{ fontSize: "12px", color: "var(--fg-muted)", marginBottom: "16px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px", textAlign: "center" }}>
