@@ -148,7 +148,7 @@ export default function WeatherSearch() {
         </div>
 
         {/* Map Container */}
-        <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "300px", zIndex: 1, marginBottom: "12px" }}>
+        <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "450px", zIndex: 1, marginBottom: "12px" }}>
           <iframe
             src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=k&z=${selectedCoords ? 15 : (mapQuery === 'Indonesia' ? 5 : 12)}&ie=UTF8&iwloc=&output=embed`}
             style={{ width: "100%", height: "calc(100% + 60px)", border: "none", position: "absolute", top: "-60px", left: 0 }}
