@@ -158,8 +158,8 @@ export default function WeatherSearch() {
           />
           {/* Scene Background over Map */}
           {weatherData && (
-            <div style={{ position: "absolute", inset: 0, zIndex: 2, opacity: 0.85, pointerEvents: "none" }}>
-              {getScene(weatherData.weather_code)}
+            <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none" }}>
+              {getScene(weatherData.weather_code, true)}
             </div>
           )}
         </div>

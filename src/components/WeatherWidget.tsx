@@ -9,7 +9,7 @@ export const LON = 113.1952448;
 /* ═══════════════════════════════════════════════
    MINIMALIST SCENES
    ═══════════════════════════════════════════════ */
-const SceneClear = () => (
+const SceneClear = ({ transparentBg = false }: { transparentBg?: boolean }) => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-clear" x1="0" y1="0" x2="0" y2="1">
@@ -26,7 +26,7 @@ const SceneClear = () => (
       @keyframes bird-fly { 0% { transform: translateX(-50px); } 100% { transform: translateX(450px); } }
     `}</style>
     
-    <rect width="400" height="200" fill="url(#bg-clear)" />
+    {!transparentBg && <rect width="400" height="200" fill="url(#bg-clear)" />}
     <rect width="400" height="200" fill="url(#sun-glow)" />
 
     <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.3">
@@ -36,7 +36,7 @@ const SceneClear = () => (
   </svg>
 );
 
-const SceneCloudy = () => (
+const SceneCloudy = ({ transparentBg = false }: { transparentBg?: boolean }) => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-cloudy" x1="0" y1="0" x2="0" y2="1">
@@ -51,7 +51,7 @@ const SceneCloudy = () => (
       @keyframes bird-fly { 0% { transform: translateX(-50px); } 100% { transform: translateX(450px); } }
     `}</style>
 
-    <rect width="400" height="200" fill="url(#bg-cloudy)" />
+    {!transparentBg && <rect width="400" height="200" fill="url(#bg-cloudy)" />}
     
     {/* Very subtle clouds */}
     <g className="cloud-dr" fill="#ffffff" opacity="0.15">
@@ -70,7 +70,7 @@ const SceneCloudy = () => (
   </svg>
 );
 
-const SceneRain = () => (
+const SceneRain = ({ transparentBg = false }: { transparentBg?: boolean }) => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-rain" x1="0" y1="0" x2="0" y2="1">
@@ -85,7 +85,7 @@ const SceneRain = () => (
       @keyframes bird-fly-fast { 0% { transform: translateX(-50px); } 100% { transform: translateX(450px); } }
     `}</style>
 
-    <rect width="400" height="200" fill="url(#bg-rain)" />
+    {!transparentBg && <rect width="400" height="200" fill="url(#bg-rain)" />}
     
     <g className="bird-fast" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.4">
       <path d="M 50 60 Q 55 58 60 60 Q 65 58 70 60" />
@@ -102,7 +102,7 @@ const SceneRain = () => (
   </svg>
 );
 
-const SceneStorm = () => (
+const SceneStorm = ({ transparentBg = false }: { transparentBg?: boolean }) => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-storm" x1="0" y1="0" x2="0" y2="1">
@@ -119,7 +119,7 @@ const SceneStorm = () => (
       @keyframes bird-fly-sfast { 0% { transform: translateX(-50px) translateY(10px); } 100% { transform: translateX(450px) translateY(-10px); } }
     `}</style>
 
-    <rect width="400" height="200" fill="url(#bg-storm)" />
+    {!transparentBg && <rect width="400" height="200" fill="url(#bg-storm)" />}
     <rect width="400" height="200" fill="rgba(255,255,255,0.8)" className="storm-flash" />
 
     <g className="bird-super-fast" stroke="#334155" strokeWidth="2" fill="none" opacity="0.5">
@@ -151,11 +151,11 @@ export const getWeatherDesc = (code: number) => {
   return "Berawan";
 };
 
-export const getScene = (code: number) => {
-  if (code >= 95) return <SceneStorm />;
-  if (code >= 51 && code <= 82) return <SceneRain />;
-  if (code >= 1 && code <= 3) return <SceneCloudy />;
-  return <SceneClear />;
+export const getScene = (code: number, transparentBg: boolean = false) => {
+  if (code >= 95) return <SceneStorm transparentBg={transparentBg} />;
+  if (code >= 51 && code <= 82) return <SceneRain transparentBg={transparentBg} />;
+  if (code >= 1 && code <= 3) return <SceneCloudy transparentBg={transparentBg} />;
+  return <SceneClear transparentBg={transparentBg} />;
 };
 
 export const getWeatherIcon = (code: number, size = 48) => {
