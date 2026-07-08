@@ -148,7 +148,7 @@ export default function WeatherSearch() {
         </div>
 
         {/* Map Container */}
-        <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "300px", zIndex: 1, marginBottom: "12px" }}>
+        <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "300px", zIndex: 1, marginBottom: "12px" }}>
           <iframe
             src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=k&z=${selectedCoords ? 15 : (mapQuery === 'Indonesia' ? 5 : 12)}&ie=UTF8&iwloc=&output=embed`}
             style={{ width: "100%", height: "100%", border: "none" }}
@@ -156,6 +156,12 @@ export default function WeatherSearch() {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
+          {/* Scene Background over Map */}
+          {weatherData && (
+            <div style={{ position: "absolute", inset: 0, zIndex: 2, opacity: 0.85, pointerEvents: "none" }}>
+              {getScene(weatherData.weather_code)}
+            </div>
+          )}
         </div>
 
         {/* Selected Location Controls - Show if weather is not currently showing */}
@@ -181,56 +187,46 @@ export default function WeatherSearch() {
         {/* Weather Data Box */}
         {weatherData && (
           <div style={{ 
-            position: "relative",
-            overflow: "hidden",
-            background: "white", 
+            background: "var(--bg-subtle)", 
             borderRadius: "12px", 
             border: "1px solid var(--border)", 
             display: "flex", 
             flexDirection: "column", 
             alignItems: "center", 
             justifyContent: "center",
-            padding: "0" 
+            padding: "20px" 
           }}>
-            {/* Absolute Background Scene */}
-            <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-              {getScene(weatherData.weather_code)}
+            <div style={{ fontSize: "12px", color: "var(--fg-dark)", marginBottom: "16px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+              <MapPin size={14} /> {locationName || `${selectedCoords?.lat.toFixed(4)}, ${selectedCoords?.lon.toFixed(4)}`}
+            </div>
+            
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
+              {getWeatherIcon(weatherData.weather_code)}
+              <div style={{ fontSize: "32px", fontWeight: 800, color: "var(--fg-dark)", lineHeight: 1 }}>
+                {weatherData.temperature_2m}°C
+              </div>
+              <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--fg-dark)" }}>
+                {getWeatherDesc(weatherData.weather_code)}
+              </div>
             </div>
 
-            {/* Content Overlay */}
-            <div style={{ position: "relative", zIndex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", height: "100%" }}>
-              <div style={{ fontSize: "12px", color: "var(--fg-dark)", marginBottom: "16px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
-                <MapPin size={14} /> {locationName || `${selectedCoords?.lat.toFixed(4)}, ${selectedCoords?.lon.toFixed(4)}`}
+            <div style={{ display: "flex", gap: "24px", width: "100%", justifyContent: "center", borderTop: "1px solid rgba(0,0,0,0.1)", paddingTop: "16px" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+                <Wind size={16} color="var(--fg-dark)" />
+                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.wind_speed_10m} km/j</span>
               </div>
-              
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-                {getWeatherIcon(weatherData.weather_code)}
-                <div style={{ fontSize: "32px", fontWeight: 800, color: "var(--fg-dark)", lineHeight: 1 }}>
-                  {weatherData.temperature_2m}°C
-                </div>
-                <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--fg-dark)" }}>
-                  {getWeatherDesc(weatherData.weather_code)}
-                </div>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+                <Droplets size={16} color="var(--fg-dark)" />
+                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.relative_humidity_2m}%</span>
               </div>
-
-              <div style={{ display: "flex", gap: "24px", width: "100%", justifyContent: "center", borderTop: "1px solid rgba(0,0,0,0.1)", paddingTop: "16px" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                  <Wind size={16} color="var(--fg-dark)" />
-                  <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.wind_speed_10m} km/j</span>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                  <Droplets size={16} color="var(--fg-dark)" />
-                  <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.relative_humidity_2m}%</span>
-                </div>
-              </div>
-
-              <button 
-                onClick={() => setWeatherData(null)} 
-                style={{ marginTop: "20px", background: "rgba(0,0,0,0.05)", border: "1px solid rgba(0,0,0,0.1)", padding: "8px 16px", borderRadius: "8px", cursor: "pointer", fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}
-              >
-                Tutup Keterangan
-              </button>
             </div>
+
+            <button 
+              onClick={() => setWeatherData(null)} 
+              style={{ marginTop: "20px", background: "rgba(0,0,0,0.05)", border: "1px solid rgba(0,0,0,0.1)", padding: "8px 16px", borderRadius: "8px", cursor: "pointer", fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}
+            >
+              Tutup Keterangan
+            </button>
           </div>
         )}
       </div>
