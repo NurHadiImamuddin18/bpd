@@ -594,10 +594,18 @@ export default function WeatherWidget() {
     const fetchWeather = async () => {
       try {
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`);
+        if (!res.ok) throw new Error("API response not ok");
         const json = await res.json();
         setData(json.current);
       } catch (error) {
         console.error("Error fetching weather:", error);
+        // Fallback data if fetch fails
+        setData({
+          temperature_2m: 29.5,
+          relative_humidity_2m: 65,
+          weather_code: 1, // Berawan as default
+          wind_speed_10m: 10.2,
+        });
       } finally {
         setLoading(false);
       }
