@@ -13,13 +13,15 @@ const SceneClear = () => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-clear" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#38bdf8" />
-        <stop offset="100%" stopColor="#bae6fd" />
+        <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.4" />
+        <stop offset="100%" stopColor="#f0f9ff" stopOpacity="0.1" />
       </linearGradient>
+      <radialGradient id="sun-glow" cx="1" cy="0" r="1">
+        <stop offset="0%" stopColor="#fef08a" stopOpacity="0.7" />
+        <stop offset="100%" stopColor="#fef08a" stopOpacity="0" />
+      </radialGradient>
     </defs>
     <style>{`
-      .sun-min { animation: sun-spin 20s linear infinite; transform-origin: 320px 50px; }
-      @keyframes sun-spin { 100% { transform: rotate(360deg); } }
       .bird { animation: bird-fly 15s linear infinite; }
       @keyframes bird-fly { 0% { transform: translateX(-50px); } 100% { transform: translateX(450px); } }
     `}</style>
@@ -27,16 +29,11 @@ const SceneClear = () => (
     {/* Background */}
     <rect width="400" height="200" fill="url(#bg-clear)" />
     
-    {/* Minimalist Sun */}
-    <g className="sun-min" fill="#fef08a" opacity="0.9">
-      <circle cx="320" cy="50" r="24" fill="#fde047" />
-      {[0,45,90,135,180,225,270,315].map(a => (
-        <rect key={a} x="318" y="14" width="4" height="10" rx="2" transform={`rotate(${a} 320 50)`} />
-      ))}
-    </g>
+    {/* Subtle Sun Glow Top Right */}
+    <rect width="400" height="200" fill="url(#sun-glow)" />
 
     {/* Slow Birds */}
-    <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.6">
+    <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.4">
       <path d="M 50 40 Q 55 35 60 40 Q 65 35 70 40" />
       <path d="M 80 50 Q 85 45 90 50 Q 95 45 100 50" style={{ animationDelay: "2s" }} />
     </g>
@@ -47,8 +44,8 @@ const SceneCloudy = () => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-cloudy" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#94a3b8" />
-        <stop offset="100%" stopColor="#cbd5e1" />
+        <stop offset="0%" stopColor="#e2e8f0" stopOpacity="0.5" />
+        <stop offset="100%" stopColor="#f1f5f9" stopOpacity="0.1" />
       </linearGradient>
     </defs>
     <style>{`
@@ -61,18 +58,18 @@ const SceneCloudy = () => (
     <rect width="400" height="200" fill="url(#bg-cloudy)" />
     
     {/* Clouds */}
-    <g className="cloud-dr" fill="#f1f5f9" opacity="0.7">
+    <g className="cloud-dr" fill="#f1f5f9" opacity="0.6">
       <ellipse cx="100" cy="40" rx="40" ry="15" />
       <ellipse cx="120" cy="35" rx="30" ry="12" />
       <ellipse cx="80" cy="38" rx="25" ry="10" />
     </g>
-    <g className="cloud-dr" fill="#f8fafc" opacity="0.5" style={{ animationDelay: "-10s", animationDuration: "25s" }}>
+    <g className="cloud-dr" fill="#f8fafc" opacity="0.4" style={{ animationDelay: "-10s", animationDuration: "25s" }}>
       <ellipse cx="300" cy="60" rx="50" ry="18" />
       <ellipse cx="270" cy="55" rx="35" ry="15" />
     </g>
 
     {/* Birds */}
-    <g className="bird" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.6">
+    <g className="bird" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.4">
       <path d="M 50 40 Q 55 35 60 40 Q 65 35 70 40" />
     </g>
   </svg>
@@ -82,8 +79,8 @@ const SceneRain = () => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-rain" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#64748b" />
-        <stop offset="100%" stopColor="#94a3b8" />
+        <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.4" />
+        <stop offset="100%" stopColor="#cbd5e1" stopOpacity="0.1" />
       </linearGradient>
     </defs>
     <style>{`
@@ -96,7 +93,7 @@ const SceneRain = () => (
     <rect width="400" height="200" fill="url(#bg-rain)" />
     
     {/* Fast Birds fleeing rain */}
-    <g className="bird-fast" stroke="#334155" strokeWidth="1.5" fill="none" opacity="0.8">
+    <g className="bird-fast" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.6">
       <path d="M 50 60 Q 55 58 60 60 Q 65 58 70 60" />
       <path d="M 30 70 Q 35 68 40 70 Q 45 68 50 70" />
     </g>
@@ -105,7 +102,7 @@ const SceneRain = () => (
     {Array.from({length: 40}).map((_,i) => (
       <line key={i} className="rain-drop"
         x1={10 + (i*21)%390} y1="0" x2={5 + (i*21)%390} y2={15 + (i%3)*5}
-        stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"
+        stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"
         style={{ animationDuration: `${0.4 + (i%5)*0.1}s`, animationDelay: `${(i*0.05)%0.8}s` }}
       />
     ))}
@@ -116,8 +113,8 @@ const SceneStorm = () => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-storm" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#334155" />
-        <stop offset="100%" stopColor="#64748b" />
+        <stop offset="0%" stopColor="#64748b" stopOpacity="0.5" />
+        <stop offset="100%" stopColor="#94a3b8" stopOpacity="0.2" />
       </linearGradient>
     </defs>
     <style>{`
@@ -130,22 +127,22 @@ const SceneStorm = () => (
     `}</style>
 
     <rect width="400" height="200" fill="url(#bg-storm)" />
-    <rect width="400" height="200" fill="#f8fafc" className="storm-flash" />
+    <rect width="400" height="200" fill="rgba(255,255,255,0.8)" className="storm-flash" />
 
     {/* Very Fast Birds fleeing storm */}
-    <g className="bird-super-fast" stroke="#0f172a" strokeWidth="2" fill="none" opacity="0.9">
+    <g className="bird-super-fast" stroke="#334155" strokeWidth="2" fill="none" opacity="0.7">
       <path d="M 50 80 Q 55 78 60 80 Q 65 78 70 80" />
       <path d="M 40 95 Q 45 93 50 95 Q 55 93 60 95" />
     </g>
 
     {/* Lightning */}
-    <polygon points="200,0 180,60 195,60 170,120 210,50 195,50 215,0" fill="#fde047" className="storm-flash" />
+    <polygon points="200,0 180,60 195,60 170,120 210,50 195,50 215,0" fill="#fde047" className="storm-flash" opacity="0.8" />
 
     {/* Heavy Rain */}
     {Array.from({length: 60}).map((_,i) => (
       <line key={i} className="rain-heavy"
         x1={5 + (i*17)%395} y1="0" x2={-10 + (i*17)%395} y2={20 + (i%4)*5}
-        stroke="#e2e8f0" strokeWidth="2" strokeLinecap="round" opacity="0.6"
+        stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" opacity="0.6"
         style={{ animationDuration: `${0.3 + (i%3)*0.05}s`, animationDelay: `${(i*0.03)%0.5}s` }}
       />
     ))}
