@@ -32,8 +32,8 @@ export default function SuccessAlert({ message }: SuccessAlertProps) {
       </div>
       <p style={{
         margin: 0,
-        fontSize: "14px",
-        color: "#374151",
+        fontSize: "11px",
+        color: "#1a1a1aff",
         lineHeight: "1.5",
       }}>
         <strong style={{ fontWeight: 700 }}>Data Saved Successfully!</strong>{" "}
