@@ -54,27 +54,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return true;
     }
 
-    if (username === "nurhadiimamuddin" && pass === "180105") {
-      try {
-        const checkQ = query(collection(db, "users"), where("username", "==", username));
-        const snap = await getDocs(checkQ);
-        if (snap.empty) {
-          const docRef = await addDoc(collection(db, "users"), {
-            nama: "Nur Hadi Imamuddin",
-            username: "nurhadiimamuddin",
-            password: "180105",
-            role: "Admin",
-            createdAt: new Date().toISOString(),
-          });
-          const session = { id: docRef.id, nama: "Nur Hadi Imamuddin", username: "nurhadiimamuddin", role: "Admin" };
-          setRoleState("Admin");
-          setUser(session);
-          localStorage.setItem("bpd_session", JSON.stringify(session));
-          return true;
+    if (username.trim() === "nurhadiimamuddin" && pass === "180105") {
+      const session = { id: "nurhadi-fallback", nama: "Nur Hadi Imamuddin", username: "nurhadiimamuddin", role: "Admin" };
+      setRoleState("Admin");
+      setUser(session);
+      localStorage.setItem("bpd_session", JSON.stringify(session));
+      
+      // Try to seed in background (non-blocking)
+      setTimeout(async () => {
+        try {
+          const checkQ = query(collection(db, "users"), where("username", "==", "nurhadiimamuddin"));
+          const snap = await getDocs(checkQ);
+          if (snap.empty) {
+            await addDoc(collection(db, "users"), {
+              nama: "Nur Hadi Imamuddin",
+              username: "nurhadiimamuddin",
+              password: "180105",
+              role: "Admin",
+              createdAt: new Date().toISOString(),
+            });
+          }
+        } catch (e) {
+          console.error("Background seed error", e);
         }
-      } catch (e) {
-        console.error("Seed error", e);
-      }
+      }, 1000);
+
+      return true;
     }
 
     try {
