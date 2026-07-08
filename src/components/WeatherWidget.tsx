@@ -228,7 +228,7 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
       overflow: "hidden",
       border: "none",
       borderRadius: "12px",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+      boxShadow: "none",
       background: "var(--bg)"
     }}>
       {/* Absolute Background Scene */}
