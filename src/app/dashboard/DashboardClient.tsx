@@ -109,32 +109,14 @@ export default function DashboardClient() {
   return (
     <div style={{ paddingBottom: "40px", fontFamily: "var(--font)", maxWidth: "1200px" }}>
       
-      {/* Top Cards Row */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginBottom: "20px" }}>
-        <StatCard 
-          title="Data Barang Tersedia" 
-          value={totalTersedia.toLocaleString("id-ID")} 
-          dateStr="Hari ini"
-        />
-        <StatCard 
-          title="Total Barang Masuk" 
-          value={totalMasuk.toLocaleString("id-ID")} 
-          dateStr="Hari ini"
-        />
-        <StatCard 
-          title="Total Barang Keluar" 
-          value={totalKeluar.toLocaleString("id-ID")} 
-          dateStr="Hari ini"
-        />
-      </div>
-
-      {/* Charts Row */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "20px" }}>
+      {/* Baris 1: Cuaca BPBD & Status Barang */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
+        <WeatherWidget />
         
-        {/* Left Chart: Pie (Channels equivalent) */}
-        <div style={{ background: "white", border: "1px solid #eaeaea", borderRadius: "8px", padding: "20px", display: "flex", flexDirection: "column", boxShadow: "0 1px 3px rgba(0,0,0,0.02)" }}>
+        {/* Pie Chart */}
+        <div style={{ background: "white", border: "1px solid #eaeaea", borderRadius: "8px", padding: "20px", display: "flex", flexDirection: "column", boxShadow: "0 1px 3px rgba(0,0,0,0.02)", height: "100%" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-            <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#111" }}>Status Logistik</h3>
+            <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#111" }}>Status Barang</h3>
             <Info size={16} color="#888" />
           </div>
           
@@ -192,8 +174,29 @@ export default function DashboardClient() {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Right Chart: Line (Revenue equivalent) */}
+      {/* Baris 2: 3 Card Data Barang */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginBottom: "20px" }}>
+        <StatCard 
+          title="Data Barang Tersedia" 
+          value={totalTersedia.toLocaleString("id-ID")} 
+          dateStr="Hari ini"
+        />
+        <StatCard 
+          title="Total Barang Masuk" 
+          value={totalMasuk.toLocaleString("id-ID")} 
+          dateStr="Hari ini"
+        />
+        <StatCard 
+          title="Total Barang Keluar" 
+          value={totalKeluar.toLocaleString("id-ID")} 
+          dateStr="Hari ini"
+        />
+      </div>
+
+      {/* Baris 3: Aktivitas Logistik */}
+      <div style={{ marginBottom: "20px" }}>
         <div style={{ background: "white", border: "1px solid #eaeaea", borderRadius: "8px", padding: "20px", display: "flex", flexDirection: "column", boxShadow: "0 1px 3px rgba(0,0,0,0.02)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
             <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#111" }}>Aktivitas Logistik</h3>
@@ -268,9 +271,8 @@ export default function DashboardClient() {
         </div>
       </div>
 
-      {/* Weather Row */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginTop: "20px" }}>
-        <WeatherWidget />
+      {/* Baris 4: Pencarian Cuaca via Peta */}
+      <div>
         <WeatherSearch />
       </div>
 
