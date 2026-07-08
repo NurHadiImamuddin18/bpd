@@ -1,12 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Bell, Search, Settings, User, Menu } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { Search, Settings, User, Menu } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
-  const { role, setRole } = useAuth();
   
   const getPageName = () => {
     if (pathname === "/") return "Analytics";
@@ -36,23 +34,11 @@ export default function Header() {
         </div>
         
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "8px" }}>
-          <select 
-             value={role} 
-             onChange={(e) => setRole(e.target.value as "admin" | "user")}
-             style={{ width: "auto", padding: "4px 8px", background: "white", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", fontSize: "12px", outline: "none", cursor: "pointer", color: "var(--fg-dark)" }}
-          >
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
-          </select>
           <button className="ghost" style={{ padding: "6px", borderRadius: "8px", color: "var(--fg-muted)" }}>
             <User size={16} />
           </button>
           <button className="ghost" style={{ padding: "6px", borderRadius: "8px", color: "var(--fg-muted)" }}>
             <Settings size={16} />
-          </button>
-          <button className="ghost" style={{ padding: "6px", borderRadius: "8px", color: "var(--fg-muted)", position: "relative" }}>
-            <Bell size={16} />
-            <div style={{ position: "absolute", top: "4px", right: "6px", width: "6px", height: "6px", background: "var(--danger)", borderRadius: "50%" }} />
           </button>
         </div>
       </div>

@@ -17,7 +17,7 @@ import {
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { role } = useAuth();
+  const { role, user, logout } = useAuth();
 
   const menuItemsTop = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard, adminOnly: true },
@@ -33,8 +33,8 @@ export default function Sidebar() {
     { name: "Laporan", href: "/laporan", icon: FileSpreadsheet, adminOnly: true },
   ];
 
-  const visibleTop = menuItemsTop.filter(item => role === "admin" || !item.adminOnly);
-  const visiblePages = menuItemsPages.filter(item => role === "admin" || !item.adminOnly);
+  const visibleTop = menuItemsTop.filter(item => role === "Admin" || !item.adminOnly);
+  const visiblePages = menuItemsPages.filter(item => role === "Admin" || !item.adminOnly);
 
   const renderMenuItem = (item: any) => {
     const isActive = pathname === item.href;
@@ -80,21 +80,25 @@ export default function Sidebar() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img 
-            src="https://ui-avatars.com/api/?name=Admin&background=f5f5f5&color=202124&size=32" 
+            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nama || "User")}&background=f5f5f5&color=202124&size=32`} 
             alt="User" 
             style={{ width: 32, height: 32, borderRadius: "50%" }} 
           />
           <div>
-            <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>
-              {role === "admin" ? "Admin Gudang" : "Staff Gudang"}
+            <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "120px" }}>
+              {user?.nama || "Loading..."}
             </div>
             <div style={{ fontSize: "11px", color: "var(--fg-muted)" }}>
-              {role === "admin" ? "Administrator" : "User"}
+              {role === "Admin" ? "Administrator" : "Staf Logistik"}
             </div>
           </div>
         </div>
         <button 
-          onClick={() => alert("Logout berhasil")} 
+          onClick={() => {
+            if (confirm("Apakah Anda yakin ingin keluar?")) {
+              logout();
+            }
+          }} 
           style={{ 
             background: "transparent", 
             border: "none", 

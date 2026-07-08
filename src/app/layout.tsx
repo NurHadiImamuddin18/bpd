@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
 import { DataProvider } from "@/context/DataProvider";
 import { AuthProvider } from "@/context/AuthContext";
+import LayoutWrapper from "@/components/LayoutWrapper";
+
 export const metadata: Metadata = {
-  title: "BPBD Logistik — Sistem Manajemen Gudang",
+  title: "Dashboard | Badan Penanggulangan Bencana Daerah Kota Probolinggo",
   description: "Aplikasi manajemen logistik dan inventaris Badan Penanggulangan Bencana Daerah",
 };
 
@@ -19,15 +19,9 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <DataProvider>
-            <div className="app-layout">
-              <Sidebar />
-              <div className="main-wrapper">
-                <Header />
-                <main className="main-content">
-                  {children}
-                </main>
-              </div>
-            </div>
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
           </DataProvider>
         </AuthProvider>
       </body>

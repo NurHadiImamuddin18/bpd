@@ -11,7 +11,7 @@ import { UserPlus } from "lucide-react";
 export default function UsersPage() {
   const { users } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form, setForm] = useState({ nama: "", email: "", role: "Staf Logistik" });
+  const [form, setForm] = useState({ nama: "", username: "", password: "", role: "User" });
 
   const set = (key: string, val: string) => setForm((p) => ({ ...p, [key]: val }));
 
@@ -20,12 +20,13 @@ export default function UsersPage() {
     try {
       await addDoc(collection(db, "users"), {
         nama: form.nama,
-        email: form.email,
+        username: form.username,
+        password: form.password,
         role: form.role,
         createdAt: new Date().toISOString(),
       });
       setIsModalOpen(false);
-      setForm({ nama: "", email: "", role: "Staf Logistik" });
+      setForm({ nama: "", username: "", password: "", role: "User" });
     } catch {
       alert("Gagal menambah staf.");
     }
@@ -43,7 +44,12 @@ export default function UsersPage() {
       accessorKey: "nama" as keyof UserItem,
       cell: (item: UserItem) => <span style={{ fontWeight: 600 }}>{item.nama}</span>,
     },
-    { header: "Kontak / Email", accessorKey: "email" as keyof UserItem },
+    { header: "Username", accessorKey: "username" as keyof UserItem },
+    { 
+      header: "Password", 
+      accessorKey: "password" as keyof UserItem,
+      cell: (item: UserItem) => <span style={{ fontFamily: "monospace", letterSpacing: "2px", color: "var(--fg-muted)" }}>••••••••</span>,
+    },
     {
       header: "Peran",
       accessorKey: "role" as keyof UserItem,
@@ -74,8 +80,12 @@ export default function UsersPage() {
             <input required value={form.nama} onChange={(e) => set("nama", e.target.value)} placeholder="Nama lengkap user" />
           </div>
           <div>
-            <label>Email atau Nomor Kontak</label>
-            <input required value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="Email atau HP" />
+            <label>Username</label>
+            <input required value={form.username} onChange={(e) => set("username", e.target.value)} placeholder="Username unik" />
+          </div>
+          <div>
+            <label>Password</label>
+            <input type="password" required value={form.password} onChange={(e) => set("password", e.target.value)} placeholder="••••••••" />
           </div>
           <div>
             <label>Peran / Jabatan</label>

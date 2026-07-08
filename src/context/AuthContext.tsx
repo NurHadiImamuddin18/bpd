@@ -1,16 +1,21 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { db, collection, query, where, getDocs } from "@/lib/firebase";
 
 interface AuthContextType {
-  role: "admin" | "user";
-  setRole: (role: "admin" | "user") => void;
+  role: "Admin" | "User" | null;
+  user: any;
+  login: (username: string, pass: string) => Promise<boolean>;
+  logout: () => void;
   isReady: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  role: "admin",
-  setRole: () => {},
+  role: null,
+  user: null,
+  login: async () => false,
+  logout: () => {},
   isReady: false,
 });
 
@@ -19,24 +24,67 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [role, setRoleState] = useState<"admin" | "user">("admin");
+  const [role, setRoleState] = useState<"Admin" | "User" | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const savedRole = localStorage.getItem("bpd_role");
-    if (savedRole === "user" || savedRole === "admin") {
-      setRoleState(savedRole);
+    const savedSession = localStorage.getItem("bpd_session");
+    if (savedSession) {
+      try {
+        const session = JSON.parse(savedSession);
+        if (session && session.role) {
+          setRoleState(session.role);
+          setUser(session);
+        }
+      } catch (e) {
+        console.error("Failed to parse session", e);
+      }
     }
     setIsReady(true);
   }, []);
 
-  const setRole = (newRole: "admin" | "user") => {
-    setRoleState(newRole);
-    localStorage.setItem("bpd_role", newRole);
+  const login = async (username: string, pass: string) => {
+    // If admin is hardcoded for safety during migration
+    if (username === "admin" && pass === "admin") {
+      const session = { id: "admin-fallback", nama: "Admin Gudang", username: "admin", role: "Admin" };
+      setRoleState("Admin");
+      setUser(session);
+      localStorage.setItem("bpd_session", JSON.stringify(session));
+      return true;
+    }
+
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", username),
+        where("password", "==", pass)
+      );
+      const snap = await getDocs(q);
+      
+      if (!snap.empty) {
+        const docData = snap.docs[0].data();
+        const session = { id: snap.docs[0].id, nama: docData.nama, username: docData.username, role: docData.role };
+        setRoleState(docData.role);
+        setUser(session);
+        localStorage.setItem("bpd_session", JSON.stringify(session));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Login error:", error);
+      return false;
+    }
+  };
+
+  const logout = () => {
+    setRoleState(null);
+    setUser(null);
+    localStorage.removeItem("bpd_session");
   };
 
   return (
-    <AuthContext.Provider value={{ role, setRole, isReady }}>
+    <AuthContext.Provider value={{ role, user, login, logout, isReady }}>
       {children}
     </AuthContext.Provider>
   );
