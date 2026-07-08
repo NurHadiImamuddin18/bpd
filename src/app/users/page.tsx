@@ -25,13 +25,6 @@ export default function UsersPage() {
     setIsModalOpen(true);
   };
 
-  const openEditModal = (item: UserItem) => {
-    setEditingId(item.id);
-    setForm({ nama: item.nama, username: item.username, password: item.password, role: item.role });
-    setSuccessMsg("");
-    setIsModalOpen(true);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -78,11 +71,6 @@ export default function UsersPage() {
       cell: (item: UserItem) => <span style={{ fontWeight: 600 }}>{item.nama}</span>,
     },
     { header: "Username", accessorKey: "username" as keyof UserItem },
-    { 
-      header: "Password", 
-      accessorKey: "password" as keyof UserItem,
-      cell: (item: UserItem) => <span style={{ fontFamily: "monospace", letterSpacing: "2px", color: "var(--fg-muted)" }}>••••••••</span>,
-    },
     {
       header: "Peran",
       accessorKey: "role" as keyof UserItem,
@@ -135,7 +123,7 @@ export default function UsersPage() {
         </form>
       </Modal>
 
-      <DataTable data={users} columns={columns} onDelete={handleDelete} onEdit={openEditModal} title="Users" searchKey="nama" hideExcel={true} />
+      <DataTable data={users} columns={columns} onDelete={handleDelete} title="Users" searchKey="nama" hideExcel={true} />
     </div>
   );
 }

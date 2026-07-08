@@ -4,7 +4,7 @@ import { useState } from "react";
 import { db, collection, addDoc, doc, updateDoc, increment } from "@/lib/firebase";
 import { useAppData } from "@/context/DataProvider";
 import { MasterItem } from "@/types";
-import { Check } from "lucide-react";
+import SuccessAlert from "@/components/SuccessAlert";
 
 interface TransactionFormProps {
   tipe: "masuk" | "keluar" | "rusak";
@@ -100,17 +100,7 @@ export default function TransactionForm({ tipe }: TransactionFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="form-grid">
-      {successMsg && (
-        <div style={{ background: "#f0fdf4", border: "1px solid #86efac", padding: "16px", borderRadius: "8px", marginBottom: "20px", display: "flex", alignItems: "flex-start", gap: "12px" }}>
-          <div style={{ background: "#22c55e", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>
-            <Check size={16} color="white" strokeWidth={3} />
-          </div>
-          <div style={{ textAlign: "left" }}>
-            <h4 style={{ margin: 0, color: "#111", fontSize: "14px", fontWeight: 700 }}>Success Message</h4>
-            <p style={{ margin: "4px 0 0", color: "#64748b", fontSize: "13px" }}>{successMsg}</p>
-          </div>
-        </div>
-      )}
+      {successMsg && <SuccessAlert message={successMsg} />}
       <div>
         <label>Pilih Logistik</label>
         <select required value={form.itemId} onChange={handleItemSelect}>

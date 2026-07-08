@@ -54,7 +54,7 @@ export default function BarangMasukPage() {
           <h3 style={{ fontSize: "14px", fontWeight: 600, marginBottom: "16px" }}>Form Penerimaan</h3>
           <TransactionForm tipe="masuk" />
         </div>
-        <DataTable data={masuk} columns={columns} onDelete={handleDelete} title="Riwayat Penerimaan" searchKey="namaBarang" />
+        <DataTable data={masuk} columns={columns} onDelete={handleDelete} title="Riwayat Penerimaan" searchKey="namaBarang" hideExcel={true} />
       </div>
     </div>
   );

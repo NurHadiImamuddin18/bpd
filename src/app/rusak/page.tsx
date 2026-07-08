@@ -66,7 +66,7 @@ export default function BarangRusakPage() {
           <h3 style={{ fontSize: "14px", fontWeight: 600, marginBottom: "16px" }}>Form Laporan Rusak</h3>
           <TransactionForm tipe="rusak" />
         </div>
-        <DataTable data={rusak} columns={columns} onDelete={handleDelete} title="Riwayat Barang Rusak" searchKey="namaBarang" />
+        <DataTable data={rusak} columns={columns} onDelete={handleDelete} title="Riwayat Barang Rusak" searchKey="namaBarang" hideExcel={true} />
       </div>
     </div>
   );

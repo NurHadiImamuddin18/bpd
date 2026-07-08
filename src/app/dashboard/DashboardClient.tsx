@@ -80,7 +80,7 @@ export default function DashboardClient() {
   }, [transactions, ready, totalMasuk, totalKeluar]);
 
   // UI Components
-  const StatCard = ({ title, value, percentage, dateStr }: any) => (
+  const StatCard = ({ title, value, dateStr }: any) => (
     <div style={{
       background: "white",
       border: "1px solid #eaeaea",
@@ -101,9 +101,7 @@ export default function DashboardClient() {
           {ready ? value : <Skeleton width="100px" height="32px" />}
         </div>
         {ready ? (
-          <div style={{ fontSize: "13px", color: "#888" }}>
-            <span style={{ color: "#22c55e", fontWeight: 600 }}>{percentage}</span> since last month
-          </div>
+          <div style={{ fontSize: "13px", color: "#888", minHeight: "16px" }}></div>
         ) : (
           <Skeleton width="140px" height="16px" />
         )}
@@ -119,19 +117,16 @@ export default function DashboardClient() {
         <StatCard 
           title="Data Barang Tersedia" 
           value={totalTersedia.toLocaleString("id-ID")} 
-          percentage="+15%" 
           dateStr="Hari ini"
         />
         <StatCard 
           title="Total Barang Masuk" 
           value={totalMasuk.toLocaleString("id-ID")} 
-          percentage="+8%" 
           dateStr="Hari ini"
         />
         <StatCard 
           title="Total Barang Keluar" 
           value={totalKeluar.toLocaleString("id-ID")} 
-          percentage="+12%" 
           dateStr="Hari ini"
         />
       </div>
@@ -147,37 +142,43 @@ export default function DashboardClient() {
           </div>
           
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            {ready && pieData.length > 0 ? (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ width: "160px", height: "160px" }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        innerRadius={0}
-                        outerRadius={80}
-                        paddingAngle={2}
-                        dataKey="value"
-                        stroke="none"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
+            {ready ? (
+              pieData.length > 0 ? (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ width: "160px", height: "160px" }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={pieData}
+                          innerRadius={0}
+                          outerRadius={80}
+                          paddingAngle={2}
+                          dataKey="value"
+                          stroke="none"
+                        >
+                          {pieData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  
+                  <div style={{ display: "flex", flexDirection: "column", gap: "12px", paddingRight: "10px" }}>
+                    {pieData.map((entry, index) => (
+                      <div key={index} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#555" }}>
+                        <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: PIE_COLORS[index % PIE_COLORS.length] }} />
+                        {entry.name}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px", paddingRight: "10px" }}>
-                  {pieData.map((entry, index) => (
-                    <div key={index} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#555" }}>
-                      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: PIE_COLORS[index % PIE_COLORS.length] }} />
-                      {entry.name}
-                    </div>
-                  ))}
+              ) : (
+                <div style={{ height: "160px", display: "flex", alignItems: "center", justifyContent: "center", color: "#888", fontSize: "14px" }}>
+                  Belum ada data kategori
                 </div>
-              </div>
+              )
             ) : (
               <div style={{ height: "160px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Skeleton width="160px" height="160px" />
