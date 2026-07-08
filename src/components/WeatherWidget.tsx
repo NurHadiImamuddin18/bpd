@@ -43,6 +43,10 @@ const SceneCloudy = ({ transparentBg = false }: { transparentBg?: boolean }) => 
         <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.4" />
         <stop offset="100%" stopColor="#f0f9ff" stopOpacity="0.1" />
       </linearGradient>
+      <radialGradient id="blue-glow" cx="1" cy="0" r="0.6">
+        <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.35" />
+        <stop offset="100%" stopColor="#7dd3fc" stopOpacity="0" />
+      </radialGradient>
     </defs>
     <style>{`
       .cloud-dr { animation: cloud-drift 25s linear infinite; }
@@ -52,6 +56,7 @@ const SceneCloudy = ({ transparentBg = false }: { transparentBg?: boolean }) => 
     `}</style>
 
     {!transparentBg && <rect width="400" height="200" fill="url(#bg-cloudy)" />}
+    <rect width="400" height="200" fill="url(#blue-glow)" />
     
     {/* Clouds */}
     <g className="cloud-dr" fill="#ffffff" opacity={transparentBg ? 0.7 : 0.15} style={transparentBg ? { filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.4))" } : undefined}>
