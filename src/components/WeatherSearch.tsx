@@ -91,7 +91,7 @@ export default function WeatherSearch() {
 
           <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "200px" }}>
             <iframe
-              src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=10&ie=UTF8&iwloc=&output=embed`}
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=k&z=10&ie=UTF8&iwloc=&output=embed`}
               style={{ width: "100%", height: "100%", border: "none", minHeight: "200px" }}
               allowFullScreen
               loading="lazy"
