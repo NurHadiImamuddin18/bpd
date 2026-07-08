@@ -7,8 +7,9 @@ export default function Header({ setIsSidebarOpen }: { setIsSidebarOpen?: (val: 
   const pathname = usePathname();
   
   const getPageName = () => {
-    if (pathname === "/") return "Analytics";
+    if (pathname === "/dashboard") return "Dashboard";
     if (pathname === "/users") return "Users";
+    if (pathname === "/items") return "Data Barang";
     const path = pathname.replace("/", "");
     return path.charAt(0).toUpperCase() + path.slice(1);
   };

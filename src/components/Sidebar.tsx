@@ -22,12 +22,12 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebar
   const { role, user, logout } = useAuth();
 
   const menuItemsTop = [
-    { name: "Dashboard", href: "/", icon: LayoutDashboard, adminOnly: true },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, adminOnly: true },
     { name: "Users", href: "/users", icon: Users, adminOnly: true },
   ];
 
   const menuItemsPages = [
-    { name: "Data Logistik", href: "/items", icon: PackageSearch, adminOnly: true },
+    { name: "Data Barang", href: "/items", icon: PackageSearch, adminOnly: true },
     { name: "Barang Masuk", href: "/masuk", icon: ArrowDownToLine, adminOnly: false },
     { name: "Barang Keluar", href: "/keluar", icon: ArrowUpFromLine, adminOnly: false },
     { name: "Barang Rusak", href: "/rusak", icon: FileX, adminOnly: true },

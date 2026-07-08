@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { db, collection, addDoc, deleteDoc, doc } from "@/lib/firebase";
 import { useAppData } from "@/context/DataProvider";
 import { MasterItem } from "@/types";
@@ -12,7 +12,6 @@ export default function MasterBarangPage() {
   const { items } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
-    kodeBarang: "",
     namaBarang: "",
     kategori: "",
     hargaSatuan: "",
@@ -20,26 +19,40 @@ export default function MasterBarangPage() {
 
   const set = (key: string, val: string) => setForm((p) => ({ ...p, [key]: val }));
 
+  // Auto-generate kode barang: cari nomor terbesar yang sudah ada, lalu +1
+  const nextKode = useMemo(() => {
+    let maxNum = 0;
+    items.forEach((item) => {
+      const match = item.kodeBarang?.match(/BPBDPROB-(\d+)/);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNum) maxNum = num;
+      }
+    });
+    return `BPBDPROB-${String(maxNum + 1).padStart(3, "0")}`;
+  }, [items]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await addDoc(collection(db, "items"), {
-        kodeBarang: form.kodeBarang,
+        kodeBarang: nextKode,
         namaBarang: form.namaBarang,
         kategori: form.kategori,
         hargaSatuan: Number(form.hargaSatuan),
         stokTersedia: 0,
         createdAt: new Date().toISOString(),
       });
-      setIsModalOpen(false);
-      setForm({ kodeBarang: "", namaBarang: "", kategori: "", hargaSatuan: "" });
     } catch {
-      alert("Gagal menambah data logistik.");
+      alert("Gagal menambah data barang.");
+    } finally {
+      setIsModalOpen(false);
+      setForm({ namaBarang: "", kategori: "", hargaSatuan: "" });
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Hapus data logistik ini?")) {
+    if (confirm("Hapus data barang ini?")) {
       await deleteDoc(doc(db, "items", id));
     }
   };
@@ -50,7 +63,7 @@ export default function MasterBarangPage() {
   const columns = [
     { header: "Kode", accessorKey: "kodeBarang" as keyof MasterItem },
     {
-      header: "Nama Logistik",
+      header: "Nama Barang",
       accessorKey: "namaBarang" as keyof MasterItem,
       cell: (item: MasterItem) => <span style={{ fontWeight: 600 }}>{item.namaBarang}</span>,
     },
@@ -71,22 +84,22 @@ export default function MasterBarangPage() {
     <div>
       <div className="flex-between" style={{ marginBottom: "20px" }}>
         <div>
-          <h1 className="page-title">Data Logistik</h1>
+          <h1 className="page-title">Data Barang</h1>
           <p className="page-subtitle">Kelola database bantuan, harga perolehan, dan stok gudang BPBD.</p>
         </div>
         <button className="primary" onClick={() => setIsModalOpen(true)}>
-          <PackagePlus size={15} /> Tambah Logistik
+          <PackagePlus size={15} /> Tambah Barang
         </button>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Tambah Data Logistik">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Tambah Data Barang">
         <form onSubmit={handleSubmit} className="form-grid">
           <div>
-            <label>Kode Logistik</label>
-            <input required value={form.kodeBarang} onChange={(e) => set("kodeBarang", e.target.value)} placeholder="Contoh: LOG-001" />
+            <label>Kode Barang</label>
+            <input disabled value={nextKode} style={{ background: "var(--bg)", color: "var(--fg-muted)", cursor: "not-allowed" }} />
           </div>
           <div>
-            <label>Nama Bantuan / Logistik</label>
+            <label>Nama Barang</label>
             <input required value={form.namaBarang} onChange={(e) => set("namaBarang", e.target.value)} placeholder="Contoh: Beras 5Kg" />
           </div>
           <div>
@@ -104,7 +117,7 @@ export default function MasterBarangPage() {
         </form>
       </Modal>
 
-      <DataTable data={items} columns={columns} onDelete={handleDelete} title="Daftar Logistik & Bantuan" searchKey="namaBarang" />
+      <DataTable data={items} columns={columns} onDelete={handleDelete} title="Daftar Barang & Bantuan" searchKey="namaBarang" />
     </div>
   );
 }

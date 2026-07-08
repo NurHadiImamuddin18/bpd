@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
@@ -9,6 +9,10 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.title = "Login | Badan Penanggulangan Bencana Daerah Kota Probolinggo";
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +49,7 @@ export default function Login() {
         <img src="/pd.png" alt="Logo" style={{ width: "64px", height: "64px", marginBottom: "16px", objectFit: "contain" }} />
         
         <h1 style={{ fontSize: "20px", fontWeight: 700, color: "var(--fg-dark)", textAlign: "center", marginBottom: "4px" }}>
-          Logistik & Peralatan
+          Managemen Gudang
         </h1>
         <p style={{ fontSize: "13px", color: "var(--fg-muted)", textAlign: "center", marginBottom: "32px", lineHeight: "1.5" }}>
           Badan Penanggulangan Bencana Daerah<br/>Kota Probolinggo

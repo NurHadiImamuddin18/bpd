@@ -5,7 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import LayoutWrapper from "@/components/LayoutWrapper";
 
 export const metadata: Metadata = {
-  title: "Dashboard | Badan Penanggulangan Bencana Daerah Kota Probolinggo",
+  title: "Badan Penanggulangan Bencana Daerah Kota Probolinggo",
   description: "Aplikasi manajemen logistik dan inventaris Badan Penanggulangan Bencana Daerah",
   icons: {
     icon: "/pd.png",

@@ -83,9 +83,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
+      const cleanUsername = username.trim();
       const q = query(
         collection(db, "users"),
-        where("username", "==", username),
+        where("username", "==", cleanUsername),
         where("password", "==", pass)
       );
       const snap = await getDocs(q);

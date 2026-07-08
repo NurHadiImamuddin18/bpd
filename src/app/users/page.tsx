@@ -11,24 +11,51 @@ import { UserPlus } from "lucide-react";
 export default function UsersPage() {
   const { users } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ nama: "", username: "", password: "", role: "User" });
 
   const set = (key: string, val: string) => setForm((p) => ({ ...p, [key]: val }));
 
+  const openAddModal = () => {
+    setEditingId(null);
+    setForm({ nama: "", username: "", password: "", role: "User" });
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (item: UserItem) => {
+    setEditingId(item.id);
+    setForm({ nama: item.nama, username: item.username, password: item.password, role: item.role });
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, "users"), {
-        nama: form.nama,
-        username: form.username,
-        password: form.password,
-        role: form.role,
-        createdAt: new Date().toISOString(),
-      });
+      const cleanUsername = form.username.trim();
+      if (editingId) {
+        import("@/lib/firebase").then(async ({ updateDoc, doc, db }) => {
+          await updateDoc(doc(db, "users", editingId), {
+            nama: form.nama,
+            username: cleanUsername,
+            password: form.password,
+            role: form.role,
+          });
+        });
+      } else {
+        await addDoc(collection(db, "users"), {
+          nama: form.nama,
+          username: cleanUsername,
+          password: form.password,
+          role: form.role,
+          createdAt: new Date().toISOString(),
+        });
+      }
+    } catch {
+      alert("Gagal menyimpan staf.");
+    } finally {
       setIsModalOpen(false);
       setForm({ nama: "", username: "", password: "", role: "User" });
-    } catch {
-      alert("Gagal menambah staf.");
+      setEditingId(null);
     }
   };
 
@@ -68,12 +95,12 @@ export default function UsersPage() {
           <h1 className="page-title">Users</h1>
           <p className="page-subtitle">Kelola daftar staf logistik dan petugas lapangan BPBD.</p>
         </div>
-        <button className="primary" onClick={() => setIsModalOpen(true)}>
+        <button className="primary" onClick={openAddModal}>
           <UserPlus size={15} /> Add User
         </button>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Tambah User Baru">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingId ? "Edit User" : "Tambah User Baru"}>
         <form onSubmit={handleSubmit} className="form-grid">
           <div>
             <label>Nama Lengkap</label>
@@ -101,7 +128,7 @@ export default function UsersPage() {
         </form>
       </Modal>
 
-      <DataTable data={users} columns={columns} onDelete={handleDelete} title="Users" searchKey="nama" hideExcel={true} />
+      <DataTable data={users} columns={columns} onDelete={handleDelete} onEdit={openEditModal} title="Users" searchKey="nama" hideExcel={true} />
     </div>
   );
 }

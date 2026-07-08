@@ -1,141 +1,110 @@
-"use client";
+import Link from "next/link";
+import { ArrowRight, Box, ShieldCheck, Zap } from "lucide-react";
 
-import { useAppData } from "@/context/DataProvider";
-import { Package, TrendingUp, ArrowDownToLine, ArrowUpFromLine, Users, Activity, Clock } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+export const metadata = {
+  title: "Badan Penanggulangan Bencana Daerah Kota Probolinggo",
+};
 
-import WeatherWidget from "@/components/WeatherWidget";
-import WeatherSearch from "@/components/WeatherSearch";
-
-export default function Dashboard() {
-  const { items, transactions, ready } = useAppData();
-  const { role } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (role === "User") {
-      router.push("/masuk");
-    }
-  }, [role, router]);
-
-  if (!ready || role === "User") return null;
-
-  const formatRp = (n: number) =>
-    new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(n);
-
-  const totalUnit = items.reduce((a, i) => a + i.stokTersedia, 0);
-  const totalSKU = items.length;
-  const totalNilai = items.reduce((a, i) => a + i.stokTersedia * i.hargaSatuan, 0);
-
-  const masuk = transactions.filter((t) => t.tipe === "masuk");
-  const keluar = transactions.filter((t) => t.tipe === "keluar");
-  const totalMasuk = masuk.reduce((a, t) => a + t.jumlah, 0);
-  const totalKeluar = keluar.reduce((a, t) => a + t.jumlah, 0);
-
-  const CardHeader = ({ icon: Icon, title, value, sub, subVal, color }: any) => (
-    <div className="card" style={{ position: "relative", paddingTop: "16px", paddingBottom: "16px", display: "flex", justifyContent: "space-between" }}>
-      <div>
-        <div style={{ color: "var(--fg-muted)", fontSize: "12px", fontWeight: 600 }}>{title}</div>
-        <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--fg-dark)", marginTop: "2px" }}>{value}</div>
-      </div>
-      <div style={{ 
-        width: "48px", height: "48px", borderRadius: "12px", 
-        background: color || "var(--fg-dark)", display: "flex", alignItems: "center", justifyContent: "center", color: "white"
-      }}>
-        <Icon size={24} />
-      </div>
-      <div style={{ position: "absolute", bottom: "16px", left: "20px", fontSize: "12px" }}>
-        <span style={{ color: "var(--success)", fontWeight: 700 }}>{subVal}</span> <span style={{ color: "var(--fg-muted)" }}>{sub}</span>
-      </div>
-    </div>
-  );
-
+export default function LandingPage() {
   return (
-    <div style={{ paddingBottom: "40px" }}>
-      <div style={{ marginBottom: "24px" }}>
-        <h1 className="page-title">Analytics</h1>
-        <p className="page-subtitle">Check the sales, value and bounce rate by country.</p>
-      </div>
+    <div style={{ fontFamily: "var(--font)", color: "var(--fg-dark)", overflowX: "hidden" }}>
+      <style>{`
+        .landing-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: #f97316;
+          color: white;
+          padding: 16px 32px;
+          border-radius: 50px;
+          font-weight: 600;
+          font-size: 16px;
+          text-decoration: none;
+          box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .landing-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 24px rgba(249, 115, 22, 0.4);
+        }
+        .feature-card {
+          background: white;
+          padding: 32px;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+          border: 1px solid rgba(0,0,0,0.05);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+      `}</style>
 
-      {/* Charts Row */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px", marginBottom: "28px" }}>
-        {/* Chart 1 */}
-        <div className="card" style={{ padding: "16px" }}>
-          <div style={{ background: "var(--success)", borderRadius: "12px", height: "160px", marginBottom: "16px", padding: "16px", display: "flex", alignItems: "flex-end", gap: "8px" }}>
-             <div style={{ flex: 1, background: "rgba(255,255,255,0.8)", height: "40%", borderRadius: "4px" }} />
-             <div style={{ flex: 1, background: "rgba(255,255,255,0.8)", height: "60%", borderRadius: "4px" }} />
-             <div style={{ flex: 1, background: "rgba(255,255,255,0.8)", height: "30%", borderRadius: "4px" }} />
-             <div style={{ flex: 1, background: "rgba(255,255,255,0.8)", height: "80%", borderRadius: "4px" }} />
-             <div style={{ flex: 1, background: "rgba(255,255,255,0.8)", height: "50%", borderRadius: "4px" }} />
-             <div style={{ flex: 1, background: "rgba(255,255,255,0.8)", height: "90%", borderRadius: "4px" }} />
-          </div>
-          <h3 style={{ fontSize: "16px" }}>Distribusi Masuk</h3>
-          <p style={{ fontSize: "13px", color: "var(--fg-muted)", marginTop: "4px" }}>Performa penerimaan minggu ini</p>
-          <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", gap: "8px", color: "var(--fg-muted)", fontSize: "12px" }}>
-            <Clock size={12} /> diperbarui 2 hari lalu
+      {/* Hero Section */}
+      <section style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px",
+        background: "linear-gradient(135deg, #fff 0%, #f9f9f9 100%)",
+        position: "relative"
+      }}>
+        {/* Abstract Background Shapes */}
+        <div style={{ position: "absolute", top: "-10%", left: "-10%", width: "400px", height: "400px", background: "rgba(249, 115, 22, 0.1)", borderRadius: "50%", filter: "blur(60px)" }} />
+        <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "500px", height: "500px", background: "rgba(249, 115, 22, 0.05)", borderRadius: "50%", filter: "blur(80px)" }} />
+        
+        <div style={{ zIndex: 1, maxWidth: "800px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <img src="/pd.png" alt="Logo BPBD" style={{ width: "96px", height: "96px", marginBottom: "24px", objectFit: "contain", animation: "slideUp 0.8s ease-out" }} />
+          
+          <h1 style={{ fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 800, lineHeight: "1.1", marginBottom: "16px", letterSpacing: "-1px", animation: "slideUp 1s ease-out" }}>
+            Sistem Informasi Manajemen Logistik & Peralatan
+          </h1>
+          
+          <p style={{ fontSize: "clamp(16px, 2vw, 20px)", color: "var(--fg-muted)", marginBottom: "40px", lineHeight: "1.6", maxWidth: "600px", animation: "slideUp 1.2s ease-out" }}>
+            Badan Penanggulangan Bencana Daerah Kota Probolinggo. Memantau, mengelola, dan mendistribusikan bantuan secara akurat, transparan, dan real-time.
+          </p>
+          
+          <div style={{ animation: "slideUp 1.4s ease-out" }}>
+            <Link href="/dashboard" className="landing-btn">
+              Masuk ke Sistem <ArrowRight size={20} />
+            </Link>
           </div>
         </div>
 
-        {/* Chart 2 */}
-        <div className="card" style={{ padding: "16px" }}>
-          <div style={{ background: "var(--success)", borderRadius: "12px", height: "160px", marginBottom: "16px", padding: "16px", position: "relative" }}>
-            <svg viewBox="0 0 100 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", overflow: "visible" }}>
-               <polyline fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" points="0,30 20,10 40,25 60,5 80,20 100,10" />
-               <circle cx="0" cy="30" r="2" fill="white" />
-               <circle cx="20" cy="10" r="2" fill="white" />
-               <circle cx="40" cy="25" r="2" fill="white" />
-               <circle cx="60" cy="5" r="2" fill="white" />
-               <circle cx="80" cy="20" r="2" fill="white" />
-               <circle cx="100" cy="10" r="2" fill="white" />
-            </svg>
+        {/* Feature Cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "24px", width: "100%", maxWidth: "1000px", marginTop: "80px", zIndex: 1, animation: "slideUp 1.6s ease-out" }}>
+          <div className="feature-card">
+            <div style={{ background: "rgba(249, 115, 22, 0.1)", color: "#f97316", width: "56px", height: "56px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+              <Box size={28} />
+            </div>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px" }}>Manajemen Stok</h3>
+            <p style={{ fontSize: "14px", color: "var(--fg-muted)", lineHeight: "1.5" }}>Pantau jumlah dan nilai aset logistik serta peralatan dengan mudah.</p>
           </div>
-          <h3 style={{ fontSize: "16px" }}>Distribusi Keluar</h3>
-          <p style={{ fontSize: "13px", color: "var(--fg-muted)", marginTop: "4px" }}><span style={{fontWeight: 700}}>+15%</span> peningkatan hari ini</p>
-          <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", gap: "8px", color: "var(--fg-muted)", fontSize: "12px" }}>
-            <Clock size={12} /> diperbarui 4 menit lalu
+          
+          <div className="feature-card">
+            <div style={{ background: "rgba(249, 115, 22, 0.1)", color: "#f97316", width: "56px", height: "56px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+              <Zap size={28} />
+            </div>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px" }}>Distribusi Cepat</h3>
+            <p style={{ fontSize: "14px", color: "var(--fg-muted)", lineHeight: "1.5" }}>Rekap riwayat penerimaan dan penyaluran bantuan secara real-time.</p>
           </div>
-        </div>
-
-        {/* Chart 3 */}
-        <div className="card" style={{ padding: "16px" }}>
-          <div style={{ background: "var(--success)", borderRadius: "12px", height: "160px", marginBottom: "16px", padding: "16px", position: "relative" }}>
-             <svg viewBox="0 0 100 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", overflow: "visible" }}>
-               <polyline fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" points="0,35 20,20 40,30 60,15 80,25 100,5" />
-               <circle cx="0" cy="35" r="2" fill="white" />
-               <circle cx="20" cy="20" r="2" fill="white" />
-               <circle cx="40" cy="30" r="2" fill="white" />
-               <circle cx="60" cy="15" r="2" fill="white" />
-               <circle cx="80" cy="25" r="2" fill="white" />
-               <circle cx="100" cy="5" r="2" fill="white" />
-            </svg>
-          </div>
-          <h3 style={{ fontSize: "16px" }}>Tugas Selesai</h3>
-          <p style={{ fontSize: "13px", color: "var(--fg-muted)", marginTop: "4px" }}>Performa penyaluran logistik</p>
-          <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", gap: "8px", color: "var(--fg-muted)", fontSize: "12px" }}>
-            <Clock size={12} /> baru saja diperbarui
+          
+          <div className="feature-card">
+            <div style={{ background: "rgba(249, 115, 22, 0.1)", color: "#f97316", width: "56px", height: "56px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+              <ShieldCheck size={28} />
+            </div>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px" }}>Data Akurat & Aman</h3>
+            <p style={{ fontSize: "14px", color: "var(--fg-muted)", lineHeight: "1.5" }}>Tersimpan secara aman di sistem cloud dengan kontrol akses multi-peran.</p>
           </div>
         </div>
-      </div>
-
-      {/* Top Cards (Like image) */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px", marginBottom: "28px" }}>
-        <CardHeader icon={Package} title="Total Stok" value={totalUnit.toLocaleString("id-ID")} sub={`dari ${totalSKU} jenis`} subVal="+5%" color="#202124" />
-        <CardHeader icon={TrendingUp} title="Nilai Aset" value={formatRp(totalNilai)} sub="estimasi aset" subVal="+2%" color="#202124" />
-        <CardHeader icon={ArrowDownToLine} title="Total Diterima" value={totalMasuk.toLocaleString("id-ID")} sub="transaksi masuk" subVal={`+${masuk.length}`} color="#202124" />
-        <CardHeader icon={ArrowUpFromLine} title="Total Distribusi" value={totalKeluar.toLocaleString("id-ID")} sub="transaksi keluar" subVal={`+${keluar.length}`} color="#202124" />
-      </div>
-
-      {/* Weather Row */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px", marginBottom: "28px" }}>
-        <div>
-          <WeatherWidget />
-        </div>
-        <div>
-          <WeatherSearch />
-        </div>
-      </div>
+      </section>
     </div>
   );
 }
