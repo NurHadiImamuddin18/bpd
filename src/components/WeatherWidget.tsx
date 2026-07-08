@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Wind, Droplets } from "lucide-react";
+import { Wind, Droplets, Sun, Cloud, CloudRain, CloudLightning } from "lucide-react";
 
 export const LAT = -7.7541377;
 export const LON = 113.1952448;
@@ -16,8 +16,8 @@ const SceneClear = () => (
         <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.4" />
         <stop offset="100%" stopColor="#f0f9ff" stopOpacity="0.1" />
       </linearGradient>
-      <radialGradient id="sun-glow" cx="1" cy="0" r="1">
-        <stop offset="0%" stopColor="#fef08a" stopOpacity="0.7" />
+      <radialGradient id="sun-glow" cx="1" cy="0" r="0.6">
+        <stop offset="0%" stopColor="#fef08a" stopOpacity="0.5" />
         <stop offset="100%" stopColor="#fef08a" stopOpacity="0" />
       </radialGradient>
     </defs>
@@ -26,14 +26,10 @@ const SceneClear = () => (
       @keyframes bird-fly { 0% { transform: translateX(-50px); } 100% { transform: translateX(450px); } }
     `}</style>
     
-    {/* Background */}
     <rect width="400" height="200" fill="url(#bg-clear)" />
-    
-    {/* Subtle Sun Glow Top Right */}
     <rect width="400" height="200" fill="url(#sun-glow)" />
 
-    {/* Slow Birds */}
-    <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.4">
+    <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.3">
       <path d="M 50 40 Q 55 35 60 40 Q 65 35 70 40" />
       <path d="M 80 50 Q 85 45 90 50 Q 95 45 100 50" style={{ animationDelay: "2s" }} />
     </g>
@@ -44,12 +40,12 @@ const SceneCloudy = () => (
   <svg viewBox="0 0 400 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
     <defs>
       <linearGradient id="bg-cloudy" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#e2e8f0" stopOpacity="0.5" />
-        <stop offset="100%" stopColor="#f1f5f9" stopOpacity="0.1" />
+        <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.4" />
+        <stop offset="100%" stopColor="#f0f9ff" stopOpacity="0.1" />
       </linearGradient>
     </defs>
     <style>{`
-      .cloud-dr { animation: cloud-drift 20s linear infinite; }
+      .cloud-dr { animation: cloud-drift 25s linear infinite; }
       @keyframes cloud-drift { 0% { transform: translateX(-100px); } 100% { transform: translateX(500px); } }
       .bird { animation: bird-fly 12s linear infinite; }
       @keyframes bird-fly { 0% { transform: translateX(-50px); } 100% { transform: translateX(450px); } }
@@ -57,19 +53,18 @@ const SceneCloudy = () => (
 
     <rect width="400" height="200" fill="url(#bg-cloudy)" />
     
-    {/* Clouds */}
-    <g className="cloud-dr" fill="#f1f5f9" opacity="0.6">
+    {/* Very subtle clouds */}
+    <g className="cloud-dr" fill="#ffffff" opacity="0.15">
       <ellipse cx="100" cy="40" rx="40" ry="15" />
       <ellipse cx="120" cy="35" rx="30" ry="12" />
       <ellipse cx="80" cy="38" rx="25" ry="10" />
     </g>
-    <g className="cloud-dr" fill="#f8fafc" opacity="0.4" style={{ animationDelay: "-10s", animationDuration: "25s" }}>
+    <g className="cloud-dr" fill="#ffffff" opacity="0.1" style={{ animationDelay: "-10s", animationDuration: "35s" }}>
       <ellipse cx="300" cy="60" rx="50" ry="18" />
       <ellipse cx="270" cy="55" rx="35" ry="15" />
     </g>
 
-    {/* Birds */}
-    <g className="bird" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.4">
+    <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.25">
       <path d="M 50 40 Q 55 35 60 40 Q 65 35 70 40" />
     </g>
   </svg>
@@ -92,17 +87,15 @@ const SceneRain = () => (
 
     <rect width="400" height="200" fill="url(#bg-rain)" />
     
-    {/* Fast Birds fleeing rain */}
-    <g className="bird-fast" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.6">
+    <g className="bird-fast" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.4">
       <path d="M 50 60 Q 55 58 60 60 Q 65 58 70 60" />
       <path d="M 30 70 Q 35 68 40 70 Q 45 68 50 70" />
     </g>
 
-    {/* Rain drops */}
     {Array.from({length: 40}).map((_,i) => (
       <line key={i} className="rain-drop"
         x1={10 + (i*21)%390} y1="0" x2={5 + (i*21)%390} y2={15 + (i%3)*5}
-        stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"
+        stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" opacity="0.4"
         style={{ animationDuration: `${0.4 + (i%5)*0.1}s`, animationDelay: `${(i*0.05)%0.8}s` }}
       />
     ))}
@@ -119,7 +112,7 @@ const SceneStorm = () => (
     </defs>
     <style>{`
       .storm-flash { animation: flash 4s infinite; }
-      @keyframes flash { 0%,88%,92%,96%,100% { opacity: 0; } 89%,93% { opacity: 0.8; } 90% { opacity: 1; } }
+      @keyframes flash { 0%,88%,92%,96%,100% { opacity: 0; } 89%,93% { opacity: 0.6; } 90% { opacity: 0.8; } }
       .rain-heavy { animation: rain-fall-heavy linear infinite; }
       @keyframes rain-fall-heavy { 0% { transform: translateY(-20px); opacity: 1; } 100% { transform: translateY(220px); opacity: 0.1; } }
       .bird-super-fast { animation: bird-fly-sfast 1.5s linear infinite; }
@@ -129,20 +122,17 @@ const SceneStorm = () => (
     <rect width="400" height="200" fill="url(#bg-storm)" />
     <rect width="400" height="200" fill="rgba(255,255,255,0.8)" className="storm-flash" />
 
-    {/* Very Fast Birds fleeing storm */}
-    <g className="bird-super-fast" stroke="#334155" strokeWidth="2" fill="none" opacity="0.7">
+    <g className="bird-super-fast" stroke="#334155" strokeWidth="2" fill="none" opacity="0.5">
       <path d="M 50 80 Q 55 78 60 80 Q 65 78 70 80" />
       <path d="M 40 95 Q 45 93 50 95 Q 55 93 60 95" />
     </g>
 
-    {/* Lightning */}
-    <polygon points="200,0 180,60 195,60 170,120 210,50 195,50 215,0" fill="#fde047" className="storm-flash" opacity="0.8" />
+    <polygon points="200,0 180,60 195,60 170,120 210,50 195,50 215,0" fill="#fde047" className="storm-flash" opacity="0.6" />
 
-    {/* Heavy Rain */}
     {Array.from({length: 60}).map((_,i) => (
       <line key={i} className="rain-heavy"
         x1={5 + (i*17)%395} y1="0" x2={-10 + (i*17)%395} y2={20 + (i%4)*5}
-        stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" opacity="0.6"
+        stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" opacity="0.5"
         style={{ animationDuration: `${0.3 + (i%3)*0.05}s`, animationDelay: `${(i*0.03)%0.5}s` }}
       />
     ))}
@@ -168,12 +158,12 @@ export const getScene = (code: number) => {
   return <SceneClear />;
 };
 
-export const getWeatherEmoji = (code: number) => {
-  if (code === 0) return "☀️";
-  if (code >= 1 && code <= 3) return "⛅";
-  if (code >= 51 && code <= 82) return "🌧️";
-  if (code >= 95) return "⛈️";
-  return "⛅";
+export const getWeatherIcon = (code: number, size = 48) => {
+  if (code === 0) return <Sun size={size} color="#eab308" />;
+  if (code >= 1 && code <= 3) return <Cloud size={size} color="#94a3b8" />;
+  if (code >= 51 && code <= 82) return <CloudRain size={size} color="#3b82f6" />;
+  if (code >= 95) return <CloudLightning size={size} color="#6366f1" />;
+  return <Cloud size={size} color="#94a3b8" />;
 };
 
 /* ═══════════════════════════════════════════════
@@ -203,11 +193,10 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
         setData(json.current);
       } catch (error) {
         console.error("Error fetching weather:", error);
-        // Fallback data if fetch fails
         setData({
           temperature_2m: 29.5,
           relative_humidity_2m: 65,
-          weather_code: 1, // Berawan as default
+          weather_code: 1, 
           wind_speed_10m: 10.2,
         });
       } finally {
@@ -219,18 +208,14 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
 
   if (loading) return (
     <div className="card" style={{ padding: "20px", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "white" }}>
-      <div style={{ textAlign: "center", color: "#888" }}>
-        <div style={{ fontSize: "28px", marginBottom: "8px" }}>🌤️</div>
+      <div style={{ textAlign: "center", color: "var(--fg-muted)" }}>
+        <Sun size={28} color="#eab308" style={{ marginBottom: "8px", margin: "0 auto" }} />
         Memuat cuaca...
       </div>
     </div>
   );
 
   if (!data) return null;
-
-  // Text colors
-  const textColor = "#0f172a";
-  const mutedColor = "rgba(15, 23, 42, 0.7)";
 
   return (
     <div className="card" style={{
@@ -244,6 +229,7 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
       border: "none",
       borderRadius: "12px",
       boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+      background: "var(--bg)"
     }}>
       {/* Absolute Background Scene */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
@@ -258,19 +244,17 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
         display: "flex", 
         flexDirection: "column", 
         height: "100%",
-        color: textColor 
+        color: "var(--fg-dark)" 
       }}>
         
         {/* Main Temperature & Icon */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px" }}>
-          <span style={{ fontSize: "48px", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}>
-            {getWeatherEmoji(data.weather_code)}
-          </span>
+          {getWeatherIcon(data.weather_code, 48)}
           <div>
-            <div style={{ fontSize: "42px", fontWeight: 800, lineHeight: 1, textShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
+            <div style={{ fontSize: "42px", fontWeight: 800, lineHeight: 1 }}>
               {data.temperature_2m}°C
             </div>
-            <div style={{ fontSize: "16px", fontWeight: 600, marginTop: "4px", color: mutedColor }}>
+            <div style={{ fontSize: "16px", fontWeight: 600, marginTop: "4px", color: "var(--fg-muted)" }}>
               {getWeatherDesc(data.weather_code)}
             </div>
           </div>
@@ -278,22 +262,22 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
 
         {/* Stats */}
         <div style={{ display: "flex", gap: "20px", marginBottom: "auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: mutedColor }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "var(--fg-muted)" }}>
             <Wind size={16} />
             <span>{data.wind_speed_10m} km/j</span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: mutedColor }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "var(--fg-muted)" }}>
             <Droplets size={16} />
             <span>{data.relative_humidity_2m}%</span>
           </div>
         </div>
 
         {/* Header moved to bottom */}
-        <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: "1px solid rgba(0,0,0,0.1)" }}>
-          <h3 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "4px", textShadow: "0 1px 2px rgba(0,0,0,0.1)" }}>
+        <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: "1px solid var(--border)" }}>
+          <h3 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "4px", color: "var(--fg-dark)" }}>
             Cuaca Daerah BPBD Kota Probolinggo
           </h3>
-          <p style={{ fontSize: "12px", margin: 0, color: mutedColor }}>
+          <p style={{ fontSize: "12px", margin: 0, color: "var(--fg-muted)" }}>
             {LAT}, {LON}
           </p>
         </div>
