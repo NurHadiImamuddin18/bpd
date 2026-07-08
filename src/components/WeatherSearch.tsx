@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, MapPin, Cloud, CloudRain, Sun, CloudLightning, Wind, Droplets, ChevronRight, ArrowLeft } from "lucide-react";
+import { Search, MapPin, Cloud, CloudRain, Sun, CloudLightning, Wind, Droplets, ChevronRight, ArrowLeft, X } from "lucide-react";
 import { getScene } from "./WeatherWidget";
 
 export default function WeatherSearch() {
@@ -187,46 +187,53 @@ export default function WeatherSearch() {
         {/* Weather Data Box */}
         {weatherData && (
           <div style={{ 
-            background: "var(--bg-subtle)", 
+            background: "transparent", 
             borderRadius: "12px", 
             border: "1px solid var(--border)", 
-            display: "flex", 
-            flexDirection: "column", 
-            alignItems: "center", 
-            justifyContent: "center",
-            padding: "20px" 
+            padding: "16px",
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            gap: "20px"
           }}>
-            <div style={{ fontSize: "12px", color: "var(--fg-dark)", marginBottom: "16px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
-              <MapPin size={14} /> {locationName || `${selectedCoords?.lat.toFixed(4)}, ${selectedCoords?.lon.toFixed(4)}`}
-            </div>
-            
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-              {getWeatherIcon(weatherData.weather_code)}
-              <div style={{ fontSize: "32px", fontWeight: 800, color: "var(--fg-dark)", lineHeight: 1 }}>
-                {weatherData.temperature_2m}°C
-              </div>
-              <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--fg-dark)" }}>
-                {getWeatherDesc(weatherData.weather_code)}
-              </div>
-            </div>
-
-            <div style={{ display: "flex", gap: "24px", width: "100%", justifyContent: "center", borderTop: "1px solid rgba(0,0,0,0.1)", paddingTop: "16px" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                <Wind size={16} color="var(--fg-dark)" />
-                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.wind_speed_10m} km/j</span>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                <Droplets size={16} color="var(--fg-dark)" />
-                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.relative_humidity_2m}%</span>
-              </div>
-            </div>
-
             <button 
-              onClick={() => setWeatherData(null)} 
-              style={{ marginTop: "20px", background: "rgba(0,0,0,0.05)", border: "1px solid rgba(0,0,0,0.1)", padding: "8px 16px", borderRadius: "8px", cursor: "pointer", fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}
+              onClick={() => setWeatherData(null)}
+              style={{ position: "absolute", top: "12px", right: "12px", background: "none", border: "none", cursor: "pointer", color: "var(--fg-muted)", padding: "4px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}
             >
-              Tutup Keterangan
+              <X size={16} />
             </button>
+            
+            {/* Left side: Icon */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "70px", height: "70px" }}>
+              {getWeatherIcon(weatherData.weather_code)} 
+            </div>
+
+            {/* Right side: Text Data */}
+            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--fg-muted)", marginBottom: "4px", fontWeight: 600 }}>
+                <MapPin size={12} /> {locationName || `${selectedCoords?.lat.toFixed(4)}, ${selectedCoords?.lon.toFixed(4)}`}
+              </div>
+              
+              <div style={{ display: "flex", alignItems: "baseline", gap: "12px", marginBottom: "8px" }}>
+                <div style={{ fontSize: "28px", fontWeight: 800, color: "var(--fg-dark)", lineHeight: 1 }}>
+                  {weatherData.temperature_2m}°C
+                </div>
+                <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--fg-dark)" }}>
+                  {getWeatherDesc(weatherData.weather_code)}
+                </div>
+              </div>
+              
+              <div style={{ display: "flex", gap: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Wind size={14} color="var(--fg-muted)" />
+                  <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.wind_speed_10m} km/j</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Droplets size={14} color="var(--fg-muted)" />
+                  <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.relative_humidity_2m}%</span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
