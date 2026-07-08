@@ -7,7 +7,18 @@ export const metadata = {
 
 export default function LandingPage() {
   return (
-    <div style={{ fontFamily: "var(--font)", color: "white", overflowX: "hidden", minHeight: "100vh", background: "linear-gradient(to bottom, #111111 0%, #333333 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
+    <div style={{ 
+      fontFamily: "var(--font)", 
+      color: "#111", 
+      overflowX: "hidden", 
+      minHeight: "100vh", 
+      backgroundColor: "#ffffff",
+      backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, #ffffff 40%)",
+      display: "flex", 
+      alignItems: "center", 
+      justifyContent: "center", 
+      padding: "24px" 
+    }}>
       <style>{`
         .landing-btn {
           display: inline-flex;
@@ -20,13 +31,12 @@ export default function LandingPage() {
           font-weight: 500;
           font-size: 16px;
           text-decoration: none;
-          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
           transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-          border: 1px solid rgba(255,255,255,0.1);
         }
         .landing-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
           background: #1a1a1a;
         }
         .animate-fade-in-up {
@@ -48,7 +58,7 @@ export default function LandingPage() {
           Warehouse Management
         </h1>
         
-        <p className="animate-fade-in-up" style={{ fontSize: "clamp(16px, 2vw, 20px)", color: "rgba(255,255,255,0.7)", marginBottom: "48px", lineHeight: "1.6", maxWidth: "600px", animationDelay: "0.1s" }}>
+        <p className="animate-fade-in-up" style={{ fontSize: "clamp(16px, 2vw, 20px)", color: "#555", marginBottom: "48px", lineHeight: "1.6", maxWidth: "600px", animationDelay: "0.1s" }}>
           Regional Disaster Management Agency of Probolinggo City
         </p>
         
