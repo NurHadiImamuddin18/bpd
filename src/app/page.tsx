@@ -15,12 +15,12 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    if (role === "user") {
+    if (role === "User") {
       router.push("/masuk");
     }
   }, [role, router]);
 
-  if (!ready || role === "user") return null;
+  if (!ready || role === "User") return null;
 
   const formatRp = (n: number) =>
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(n);

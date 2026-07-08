@@ -22,12 +22,12 @@ export default function DataPenerimaPage() {
   });
 
   useEffect(() => {
-    if (role === "user") {
+    if (role === "User") {
       router.push("/masuk");
     }
   }, [role, router]);
 
-  if (!ready || role === "user") return null;
+  if (!ready || role === "User") return null;
 
   const set = (k: keyof typeof form, v: string) => setForm((p) => ({ ...p, [k]: v }));
 

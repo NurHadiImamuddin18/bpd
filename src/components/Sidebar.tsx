@@ -12,10 +12,12 @@ import {
   FileX, 
   Contact,
   FileSpreadsheet, 
-  LogOut
+  LogOut,
+  User,
+  X
 } from "lucide-react";
 
-export default function Sidebar() {
+export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen?: boolean, setIsSidebarOpen?: (val: boolean) => void }) {
   const pathname = usePathname();
   const { role, user, logout } = useAuth();
 
@@ -52,11 +54,30 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-header">
-        <img src="/pd.png" alt="BPBD" />
-        <span>Badan Penanggulangan Bencana Daerah Kota Probolinggo</span>
-      </div>
+    <>
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="sidebar-overlay"
+          onClick={() => setIsSidebarOpen && setIsSidebarOpen(false)}
+        />
+      )}
+      
+      <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+        <div className="sidebar-header">
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <img src="/pd.png" alt="BPBD" />
+            <span>Badan Penanggulangan Bencana Daerah Kota Probolinggo</span>
+          </div>
+          {setIsSidebarOpen && (
+            <button 
+              className="mobile-close-btn"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <X size={20} />
+            </button>
+          )}
+        </div>
       
       <div className="sidebar-content">
         <div className="sidebar-title">MAIN</div>
@@ -79,17 +100,15 @@ export default function Sidebar() {
         justifyContent: "space-between"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <img 
-            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nama || "User")}&background=f5f5f5&color=202124&size=32`} 
-            alt="User" 
-            style={{ width: 32, height: 32, borderRadius: "50%" }} 
-          />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "32px", height: "32px", color: "var(--fg-muted)" }}>
+            <User size={20} />
+          </div>
           <div>
             <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "120px" }}>
               {user?.nama || "Loading..."}
             </div>
             <div style={{ fontSize: "11px", color: "var(--fg-muted)" }}>
-              {role === "Admin" ? "Administrator" : "Staf Logistik"}
+              {user?.username || "..."}
             </div>
           </div>
         </div>
@@ -114,5 +133,6 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

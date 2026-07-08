@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Search, Settings, User, Menu } from "lucide-react";
 
-export default function Header() {
+export default function Header({ setIsSidebarOpen }: { setIsSidebarOpen?: (val: boolean) => void }) {
   const pathname = usePathname();
   
   const getPageName = () => {
@@ -18,9 +18,15 @@ export default function Header() {
   return (
     <header className="top-header" style={{ padding: "0 28px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px", flexShrink: 0, marginTop: "16px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        <button className="ghost" style={{ padding: "4px", color: "var(--fg-muted)", display: "flex", alignItems: "center" }}>
-          <Menu size={20} />
-        </button>
+        {setIsSidebarOpen && (
+          <button 
+            className="ghost mobile-menu-btn" 
+            onClick={() => setIsSidebarOpen(true)}
+            style={{ padding: "4px", color: "var(--fg-muted)", display: "flex", alignItems: "center", border: "none", background: "none", cursor: "pointer" }}
+          >
+            <Menu size={20} />
+          </button>
+        )}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px" }}>
           <span style={{ color: "var(--fg-muted)" }}>Pages</span>
           <span style={{ color: "var(--fg-muted)" }}>/</span>

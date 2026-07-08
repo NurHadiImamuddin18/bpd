@@ -7,6 +7,9 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 export const metadata: Metadata = {
   title: "Dashboard | Badan Penanggulangan Bencana Daerah Kota Probolinggo",
   description: "Aplikasi manajemen logistik dan inventaris Badan Penanggulangan Bencana Daerah",
+  icons: {
+    icon: "/pd.png",
+  },
 };
 
 export default function RootLayout({

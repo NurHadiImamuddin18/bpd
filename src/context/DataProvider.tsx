@@ -100,10 +100,17 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
   }, [items, transactions]);
 
+  const value = React.useMemo(() => ({
+    items: itemsWithStock,
+    users,
+    transactions,
+    receivers,
+    ready
+  }), [itemsWithStock, users, transactions, receivers, ready]);
+
   return (
-    <DataContext.Provider value={{ items: itemsWithStock, users, transactions, receivers, ready }}>
+    <DataContext.Provider value={value}>
       {children}
     </DataContext.Provider>
   );
 }
-
