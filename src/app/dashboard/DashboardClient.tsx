@@ -274,6 +274,17 @@ export default function DashboardClient() {
         <WeatherSearch />
       </div>
 
+      {/* Showcase 4 Kondisi Cuaca (Sementara) */}
+      <div style={{ marginTop: "32px", paddingTop: "24px", borderTop: "1px dashed var(--border)" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--fg-dark)", marginBottom: "16px" }}>Pratinjau 4 Kondisi Cuaca (Sementara)</h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
+          <WeatherWidget overrideCode={0} overrideTemp={32} />
+          <WeatherWidget overrideCode={2} overrideTemp={28} />
+          <WeatherWidget overrideCode={61} overrideTemp={24} />
+          <WeatherWidget overrideCode={95} overrideTemp={22} />
+        </div>
+      </div>
+
     </div>
   );
 }

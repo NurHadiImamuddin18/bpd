@@ -228,10 +228,9 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
 
   if (!data) return null;
 
-  // Determine text color based on background darkness
-  const isDarkBg = data.weather_code >= 51;
-  const textColor = isDarkBg ? "#f8fafc" : "#0f172a";
-  const mutedColor = isDarkBg ? "rgba(248, 250, 252, 0.8)" : "rgba(15, 23, 42, 0.7)";
+  // Text colors
+  const textColor = "#0f172a";
+  const mutedColor = "rgba(15, 23, 42, 0.7)";
 
   return (
     <div className="card" style={{
@@ -290,7 +289,7 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
         </div>
 
         {/* Header moved to bottom */}
-        <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}` }}>
+        <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: "1px solid rgba(0,0,0,0.1)" }}>
           <h3 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "4px", textShadow: "0 1px 2px rgba(0,0,0,0.1)" }}>
             Cuaca Daerah BPBD Kota Probolinggo
           </h3>
