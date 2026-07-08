@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Search, MapPin, Cloud, CloudRain, Sun, CloudLightning, Wind, Droplets, ChevronRight, ArrowLeft } from "lucide-react";
 
 export default function WeatherSearch() {
@@ -11,28 +11,63 @@ export default function WeatherSearch() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
   const [locationName, setLocationName] = useState("");
+  
+  // Autocomplete state
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const searchLocation = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-    setMapQuery(query.trim());
-    setLoading(true);
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Debounce search
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (query.trim().length >= 2 && step === 1) {
+        fetchSuggestions(query);
+      } else {
+        setSuggestions([]);
+        setShowDropdown(false);
+      }
+    }, 400);
+    return () => clearTimeout(delayDebounceFn);
+  }, [query, step]);
+
+  const fetchSuggestions = async (q: string) => {
     try {
-      const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query.trim())}&count=1&language=id&format=json`);
+      const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q.trim())}&count=5&language=id&format=json`);
       const json = await res.json();
       if (json.results && json.results.length > 0) {
-        const loc = json.results[0];
-        setSelectedCoords({ lat: loc.latitude, lon: loc.longitude });
-        setLocationName(`${loc.name}, ${loc.admin1 || ""} ${loc.country || ""}`);
+        setSuggestions(json.results);
+        setShowDropdown(true);
       } else {
-        setSelectedCoords(null);
-        setLocationName("");
+        setSuggestions([]);
       }
     } catch (error) {
       console.error("Geocoding error:", error);
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const getFullName = (loc: any) => {
+    // loc.name = Desa/Kecamatan, loc.admin2 = Kabupaten/Kota, loc.admin1 = Provinsi
+    return [loc.name, loc.admin2, loc.admin1].filter(Boolean).join(", ");
+  };
+
+  const selectLocation = (loc: any) => {
+    const fullName = getFullName(loc);
+    setQuery(fullName);
+    setMapQuery(fullName);
+    setSelectedCoords({ lat: loc.latitude, lon: loc.longitude });
+    setLocationName(fullName);
+    setShowDropdown(false);
   };
 
   const fetchWeather = async () => {
@@ -73,23 +108,47 @@ export default function WeatherSearch() {
       
       {step === 1 ? (
         <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-          <form onSubmit={searchLocation} style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
-            <div style={{ position: "relative", flex: 1 }}>
+          <div style={{ position: "relative", marginBottom: "12px", zIndex: 50 }} ref={dropdownRef}>
+            <div style={{ position: "relative" }}>
               <Search size={14} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--fg-muted)" }} />
               <input 
                 type="text" 
-                placeholder="Cari lokasi..." 
+                placeholder="Ketik desa atau kota..." 
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                style={{ width: "100%", paddingLeft: "34px", height: "36px", border: "1px solid var(--border)", borderRadius: "8px", fontSize: "13px", background: "var(--bg)", outline: "none" }}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  if (!e.target.value) {
+                     setSelectedCoords(null);
+                     setLocationName("");
+                  }
+                }}
+                onFocus={() => {
+                  if (suggestions.length > 0) setShowDropdown(true);
+                }}
+                style={{ width: "100%", paddingLeft: "34px", height: "36px", border: "1px solid var(--border)", borderRadius: "8px", fontSize: "13px", background: "var(--bg)", outline: "none", color: "var(--fg-dark)" }}
               />
             </div>
-            <button type="submit" disabled={loading} style={{ background: "var(--fg-dark)", color: "white", border: "none", borderRadius: "8px", padding: "0 14px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Search size={16} />
-            </button>
-          </form>
 
-          <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "200px" }}>
+            {/* Dropdown Suggestions */}
+            {showDropdown && suggestions.length > 0 && (
+              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: "4px", background: "white", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", border: "1px solid var(--border)", overflow: "hidden", zIndex: 100 }}>
+                {suggestions.map((loc) => (
+                  <div 
+                    key={loc.id}
+                    onClick={() => selectLocation(loc)}
+                    style={{ padding: "10px 12px", cursor: "pointer", borderBottom: "1px solid #f0f0f0", fontSize: "12px", color: "#333", display: "flex", alignItems: "center", gap: "8px" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                  >
+                    <MapPin size={12} color="#888" />
+                    <span>{getFullName(loc)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "200px", zIndex: 1 }}>
             <iframe
               src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=k&z=10&ie=UTF8&iwloc=&output=embed`}
               style={{ width: "100%", height: "100%", border: "none", minHeight: "200px" }}
