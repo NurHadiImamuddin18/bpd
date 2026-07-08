@@ -8,7 +8,7 @@ import Modal from "@/components/Modal";
 import { ReceiverItem } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { UserPlus } from "lucide-react";
+import { UserPlus, Check } from "lucide-react";
 
 export default function DataPenerimaPage() {
   const { receivers, ready } = useAppData();
@@ -66,10 +66,13 @@ export default function DataPenerimaPage() {
         });
       }
       
-      window.alert("Data berhasil tersimpan!");
-      setIsModalOpen(false);
-      setForm({ nama: "", kontak: "", instansi: "" });
-      setEditingId(null);
+      setSuccessMsg("Data berhasil ditambahkan atau diperbarui.");
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setForm({ nama: "", kontak: "", instansi: "" });
+        setEditingId(null);
+        setSuccessMsg("");
+      }, 1500);
     } catch {
       alert("Gagal menyimpan data penerima.");
     }
@@ -104,6 +107,17 @@ export default function DataPenerimaPage() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingId ? "Edit Penerima" : "Tambah Penerima"}>
+        {successMsg && (
+          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", padding: "16px", borderRadius: "8px", marginBottom: "20px", display: "flex", alignItems: "flex-start", gap: "12px" }}>
+            <div style={{ background: "#22c55e", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>
+              <Check size={16} color="white" strokeWidth={3} />
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <h4 style={{ margin: 0, color: "#111", fontSize: "14px", fontWeight: 700 }}>Success Message</h4>
+              <p style={{ margin: "4px 0 0", color: "#64748b", fontSize: "13px" }}>{successMsg}</p>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="form-grid">
           <div>
             <label>Nama Penerima / PIC</label>
