@@ -66,13 +66,10 @@ export default function DataPenerimaPage() {
         });
       }
       
-      setSuccessMsg("Data berhasil tersimpan");
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setForm({ nama: "", kontak: "", instansi: "" });
-        setEditingId(null);
-        setSuccessMsg("");
-      }, 700);
+      window.alert("Data berhasil tersimpan!");
+      setIsModalOpen(false);
+      setForm({ nama: "", kontak: "", instansi: "" });
+      setEditingId(null);
     } catch {
       alert("Gagal menyimpan data penerima.");
     }
@@ -107,11 +104,6 @@ export default function DataPenerimaPage() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingId ? "Edit Penerima" : "Tambah Penerima"}>
-        {successMsg && (
-          <div style={{ background: "#dcfce3", color: "#166534", padding: "12px", borderRadius: "8px", marginBottom: "16px", textAlign: "center", fontSize: "14px", fontWeight: 600 }}>
-            {successMsg}
-          </div>
-        )}
         <form onSubmit={handleSubmit} className="form-grid">
           <div>
             <label>Nama Penerima / PIC</label>

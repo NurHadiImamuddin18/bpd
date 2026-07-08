@@ -79,14 +79,10 @@ export default function MasterBarangPage() {
           createdAt: new Date().toISOString(),
         });
       }
-      
-      setSuccessMsg("Data berhasil tersimpan");
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setForm({ namaBarang: "", kategori: "", hargaSatuan: "" });
-        setEditingId(null);
-        setSuccessMsg("");
-      }, 700);
+      window.alert("Data berhasil tersimpan!");
+      setIsModalOpen(false);
+      setForm({ namaBarang: "", kategori: "", hargaSatuan: "" });
+      setEditingId(null);
     } catch {
       alert("Gagal menyimpan data barang.");
     }
@@ -134,11 +130,6 @@ export default function MasterBarangPage() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingId ? "Edit Data Barang" : "Tambah Data Barang"}>
-        {successMsg && (
-          <div style={{ background: "#dcfce3", color: "#166534", padding: "12px", borderRadius: "8px", marginBottom: "16px", textAlign: "center", fontSize: "14px", fontWeight: 600 }}>
-            {successMsg}
-          </div>
-        )}
         <form onSubmit={handleSubmit} className="form-grid">
           {!editingId && (
             <div>

@@ -52,13 +52,10 @@ export default function UsersPage() {
           createdAt: new Date().toISOString(),
         });
       }
-      setSuccessMsg("Data berhasil tersimpan");
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setForm({ nama: "", username: "", password: "", role: "User" });
-        setEditingId(null);
-        setSuccessMsg("");
-      }, 1000); // Reduced to 1s for snappier feel
+      window.alert("Data berhasil tersimpan!");
+      setIsModalOpen(false);
+      setForm({ nama: "", username: "", password: "", role: "User" });
+      setEditingId(null);
     } catch {
       alert("Gagal menyimpan staf.");
     }
@@ -106,11 +103,6 @@ export default function UsersPage() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingId ? "Edit User" : "Tambah User Baru"}>
-        {successMsg && (
-          <div style={{ background: "#dcfce3", color: "#166534", padding: "12px", borderRadius: "8px", marginBottom: "16px", textAlign: "center", fontSize: "14px", fontWeight: 600 }}>
-            {successMsg}
-          </div>
-        )}
         <form onSubmit={handleSubmit} className="form-grid">
           <div>
             <label>Nama Lengkap</label>
