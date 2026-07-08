@@ -315,7 +315,7 @@ const WeatherPreviewCard = ({ code, title }: { code: number, title: string }) =>
           />
           {/* Scene Background over Map */}
           <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none" }}>
-            {getScene(weatherData.weather_code)}
+            {getScene(weatherData.weather_code, true)}
           </div>
         </div>
 
