@@ -218,7 +218,7 @@ export default function DashboardClient() {
             </div>
           </div>
           
-          <div style={{ flex: 1, minHeight: "260px" }}>
+          <div style={{ flex: 1, height: "300px", minHeight: "260px" }}>
             {ready ? (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={lineData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
