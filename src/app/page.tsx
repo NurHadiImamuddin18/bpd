@@ -13,7 +13,7 @@ export default function LandingPage() {
       overflowX: "hidden", 
       minHeight: "100vh", 
       backgroundColor: "#ffffff",
-      backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, #ffffff 40%)",
+      backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.07) 0%, #ffffff 25%)",
       display: "flex", 
       alignItems: "center", 
       justifyContent: "center", 
@@ -26,10 +26,10 @@ export default function LandingPage() {
           gap: 12px;
           background: #000000;
           color: white;
-          padding: 16px 40px;
+          padding: 18px 48px;
           border-radius: 50px;
           font-weight: 500;
-          font-size: 16px;
+          font-size: 18px;
           text-decoration: none;
           box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
           transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
@@ -52,13 +52,13 @@ export default function LandingPage() {
         }
       `}</style>
 
-      <div style={{ zIndex: 1, maxWidth: "800px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ zIndex: 1, maxWidth: "1000px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
         
-        <h1 className="animate-fade-in-up" style={{ fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 700, lineHeight: "1.1", marginBottom: "16px", letterSpacing: "-1px" }}>
+        <h1 className="animate-fade-in-up" style={{ fontSize: "clamp(48px, 8vw, 84px)", fontWeight: 600, lineHeight: "1.05", marginBottom: "20px", letterSpacing: "-2px" }}>
           Warehouse Management
         </h1>
         
-        <p className="animate-fade-in-up" style={{ fontSize: "clamp(16px, 2vw, 20px)", color: "#555", marginBottom: "48px", lineHeight: "1.6", maxWidth: "600px", animationDelay: "0.1s" }}>
+        <p className="animate-fade-in-up" style={{ fontSize: "clamp(18px, 2.5vw, 24px)", color: "#555", marginBottom: "56px", lineHeight: "1.6", maxWidth: "800px", animationDelay: "0.1s" }}>
           Regional Disaster Management Agency of Probolinggo City
         </p>
         
