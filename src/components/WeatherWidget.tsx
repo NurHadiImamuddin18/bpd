@@ -229,7 +229,7 @@ export default function WeatherWidget({ overrideCode, overrideTemp }: { override
       border: "none",
       borderRadius: "12px",
       boxShadow: "none",
-      background: "var(--bg)"
+      background: "white"
     }}>
       {/* Absolute Background Scene */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>

@@ -191,7 +191,7 @@ export default function WeatherSearch() {
             <div style={{ 
               position: "relative",
               overflow: "hidden",
-              background: "var(--bg-subtle)", 
+              background: "white", 
               borderRadius: "12px", 
               border: "1px solid var(--border)", 
               display: "flex", 
