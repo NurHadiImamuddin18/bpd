@@ -86,7 +86,7 @@ export default function MasterBarangPage() {
         setForm({ namaBarang: "", kategori: "", hargaSatuan: "" });
         setEditingId(null);
         setSuccessMsg("");
-      }, 1500);
+      }, 700);
     } catch {
       alert("Gagal menyimpan data barang.");
     }

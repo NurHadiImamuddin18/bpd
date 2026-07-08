@@ -72,7 +72,7 @@ export default function DataPenerimaPage() {
         setForm({ nama: "", kontak: "", instansi: "" });
         setEditingId(null);
         setSuccessMsg("");
-      }, 1500);
+      }, 700);
     } catch {
       alert("Gagal menyimpan data penerima.");
     }

@@ -83,7 +83,7 @@ export default function TransactionForm({ tipe }: TransactionFormProps) {
         setForm({ itemId: "", jumlah: "", pelaku: "", penerima: "", keterangan: "", tanggal: new Date().toISOString().slice(0, 16) });
         setSelectedItem(null);
         setSuccessMsg("");
-      }, 1500);
+      }, 700);
     } catch {
       alert("Gagal menyimpan transaksi.");
     } finally {

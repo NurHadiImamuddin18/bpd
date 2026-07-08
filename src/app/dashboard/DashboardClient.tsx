@@ -9,6 +9,8 @@ import {
   PieChart, Pie, Cell, 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from "recharts";
+import WeatherWidget from "@/components/WeatherWidget";
+import WeatherSearch from "@/components/WeatherSearch";
 
 export default function DashboardClient() {
   const { items, transactions, ready } = useAppData();
@@ -43,7 +45,7 @@ export default function DashboardClient() {
     const kategoriMap: Record<string, number> = {};
     items.forEach(item => {
       const kat = item.kategori || "Lainnya";
-      kategoriMap[kat] = (kategoriMap[kat] || 0) + item.stokTersedia;
+      kategoriMap[kat] = (kategoriMap[kat] || 0) + 1;
     });
     
     return Object.entries(kategoriMap)
@@ -255,8 +257,14 @@ export default function DashboardClient() {
             )}
           </div>
         </div>
-
       </div>
+
+      {/* Weather Row */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginTop: "20px" }}>
+        <WeatherWidget />
+        <WeatherSearch />
+      </div>
+
     </div>
   );
 }

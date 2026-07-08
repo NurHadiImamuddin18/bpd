@@ -36,13 +36,12 @@ export default function UsersPage() {
     try {
       const cleanUsername = form.username.trim();
       if (editingId) {
-        import("@/lib/firebase").then(async ({ updateDoc, doc, db }) => {
-          await updateDoc(doc(db, "users", editingId), {
-            nama: form.nama,
-            username: cleanUsername,
-            password: form.password,
-            role: form.role,
-          });
+        const { updateDoc, doc, db } = await import("@/lib/firebase");
+        await updateDoc(doc(db, "users", editingId), {
+          nama: form.nama,
+          username: cleanUsername,
+          password: form.password,
+          role: form.role,
         });
       } else {
         await addDoc(collection(db, "users"), {
@@ -59,7 +58,7 @@ export default function UsersPage() {
         setForm({ nama: "", username: "", password: "", role: "User" });
         setEditingId(null);
         setSuccessMsg("");
-      }, 1500);
+      }, 1000); // Reduced to 1s for snappier feel
     } catch {
       alert("Gagal menyimpan staf.");
     }
