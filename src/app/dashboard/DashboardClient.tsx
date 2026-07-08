@@ -50,7 +50,7 @@ export default function DashboardClient() {
     ];
   }, [ready, totalTersedia, totalMasuk, totalKeluar, totalRusak]);
 
-  const PIE_COLORS = ["#3b82f6", "#f97316", "#475569", "#ef4444"];
+  const PIE_COLORS = ["#43a047", "#f97316", "#475569", "#ef4444"];
 
   // Line Chart Data (Aktivitas per Bulan - Dummy/Simple calculation based on transactions)
   // For the sake of matching the image, we will group transactions by month
