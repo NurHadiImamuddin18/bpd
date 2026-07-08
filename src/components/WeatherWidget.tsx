@@ -29,7 +29,7 @@ const SceneClear = ({ transparentBg = false }: { transparentBg?: boolean }) => (
     {!transparentBg && <rect width="400" height="200" fill="url(#bg-clear)" />}
     <rect width="400" height="200" fill="url(#sun-glow)" />
 
-    <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.3">
+    <g className="bird" stroke="#ffffff" strokeWidth="2" fill="none" opacity="0.8" style={{ filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.8))" }}>
       <path d="M 50 40 Q 55 35 60 40 Q 65 35 70 40" />
       <path d="M 80 50 Q 85 45 90 50 Q 95 45 100 50" style={{ animationDelay: "2s" }} />
     </g>
@@ -53,18 +53,18 @@ const SceneCloudy = ({ transparentBg = false }: { transparentBg?: boolean }) => 
 
     {!transparentBg && <rect width="400" height="200" fill="url(#bg-cloudy)" />}
     
-    {/* Very subtle clouds */}
-    <g className="cloud-dr" fill="#ffffff" opacity="0.15">
+    {/* Clouds */}
+    <g className="cloud-dr" fill="#ffffff" opacity="0.7" style={{ filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.4))" }}>
       <ellipse cx="100" cy="40" rx="40" ry="15" />
       <ellipse cx="120" cy="35" rx="30" ry="12" />
       <ellipse cx="80" cy="38" rx="25" ry="10" />
     </g>
-    <g className="cloud-dr" fill="#ffffff" opacity="0.1" style={{ animationDelay: "-10s", animationDuration: "35s" }}>
+    <g className="cloud-dr" fill="#ffffff" opacity="0.5" style={{ animationDelay: "-10s", animationDuration: "35s", filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.4))" }}>
       <ellipse cx="300" cy="60" rx="50" ry="18" />
       <ellipse cx="270" cy="55" rx="35" ry="15" />
     </g>
 
-    <g className="bird" stroke="#0284c7" strokeWidth="1.5" fill="none" opacity="0.25">
+    <g className="bird" stroke="#ffffff" strokeWidth="2" fill="none" opacity="0.8" style={{ filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.8))" }}>
       <path d="M 50 40 Q 55 35 60 40 Q 65 35 70 40" />
     </g>
   </svg>
@@ -87,7 +87,7 @@ const SceneRain = ({ transparentBg = false }: { transparentBg?: boolean }) => (
 
     {!transparentBg && <rect width="400" height="200" fill="url(#bg-rain)" />}
     
-    <g className="bird-fast" stroke="#475569" strokeWidth="1.5" fill="none" opacity="0.4">
+    <g className="bird-fast" stroke="#ffffff" strokeWidth="2" fill="none" opacity="0.8" style={{ filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.8))" }}>
       <path d="M 50 60 Q 55 58 60 60 Q 65 58 70 60" />
       <path d="M 30 70 Q 35 68 40 70 Q 45 68 50 70" />
     </g>
@@ -122,7 +122,7 @@ const SceneStorm = ({ transparentBg = false }: { transparentBg?: boolean }) => (
     {!transparentBg && <rect width="400" height="200" fill="url(#bg-storm)" />}
     <rect width="400" height="200" fill="rgba(255,255,255,0.8)" className="storm-flash" />
 
-    <g className="bird-super-fast" stroke="#334155" strokeWidth="2" fill="none" opacity="0.5">
+    <g className="bird-super-fast" stroke="#ffffff" strokeWidth="2.5" fill="none" opacity="0.9" style={{ filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.8))" }}>
       <path d="M 50 80 Q 55 78 60 80 Q 65 78 70 80" />
       <path d="M 40 95 Q 45 93 50 95 Q 55 93 60 95" />
     </g>
