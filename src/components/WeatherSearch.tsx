@@ -10,7 +10,6 @@ export default function WeatherSearch() {
   const [selectedCoords, setSelectedCoords] = useState<{lat: number, lon: number} | null>(null);
   const [weatherData, setWeatherData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState<1 | 2>(1);
   const [locationName, setLocationName] = useState("");
   
   // Autocomplete state
@@ -32,7 +31,7 @@ export default function WeatherSearch() {
   // Debounce search
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if (query.trim().length >= 2 && step === 1) {
+      if (query.trim().length >= 2) {
         fetchSuggestions(query);
       } else {
         setSuggestions([]);
@@ -40,7 +39,7 @@ export default function WeatherSearch() {
       }
     }, 400);
     return () => clearTimeout(delayDebounceFn);
-  }, [query, step]);
+  }, [query]);
 
   const fetchSuggestions = async (q: string) => {
     try {
@@ -78,7 +77,6 @@ export default function WeatherSearch() {
       const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${selectedCoords.lat}&longitude=${selectedCoords.lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`);
       const json = await res.json();
       setWeatherData(json.current);
-      setStep(2);
     } catch (error) {
       console.error("Weather fetch error:", error);
       alert("Gagal mengambil data cuaca.");
@@ -107,135 +105,138 @@ export default function WeatherSearch() {
     <div className="card" style={{ padding: "20px", display: "flex", flexDirection: "column", height: "100%", background: "var(--bg)" }}>
       <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--fg-dark)", marginBottom: "16px" }}>Cek Cuaca via Peta</h3>
       
-      {step === 1 ? (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-          <div style={{ position: "relative", marginBottom: "12px", zIndex: 50 }} ref={dropdownRef}>
-            <div style={{ position: "relative" }}>
-              <Search size={14} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--fg-muted)" }} />
-              <input 
-                type="text" 
-                placeholder="Ketik desa atau kota..." 
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  if (!e.target.value) {
-                     setSelectedCoords(null);
-                     setLocationName("");
-                  }
-                }}
-                onFocus={() => {
-                  if (suggestions.length > 0) setShowDropdown(true);
-                }}
-                style={{ width: "100%", paddingLeft: "34px", height: "36px", border: "1px solid var(--border)", borderRadius: "8px", fontSize: "13px", background: "var(--bg)", outline: "none", color: "var(--fg-dark)" }}
-              />
-            </div>
-
-            {/* Dropdown Suggestions */}
-            {showDropdown && suggestions.length > 0 && (
-              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: "4px", background: "white", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", border: "1px solid var(--border)", overflow: "hidden", zIndex: 100 }}>
-                {suggestions.map((loc) => (
-                  <div 
-                    key={loc.id}
-                    onClick={() => selectLocation(loc)}
-                    style={{ padding: "10px 12px", cursor: "pointer", borderBottom: "1px solid #f0f0f0", fontSize: "12px", color: "#333", display: "flex", alignItems: "center", gap: "8px" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                  >
-                    <MapPin size={12} color="#888" />
-                    <span>{getFullName(loc)}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "200px", zIndex: 1 }}>
-            <iframe
-              src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=k&z=${mapQuery === 'Indonesia' ? 5 : 12}&ie=UTF8&iwloc=&output=embed`}
-              style={{ width: "100%", height: "100%", border: "none", minHeight: "200px" }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+      <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+        <div style={{ position: "relative", marginBottom: "12px", zIndex: 50 }} ref={dropdownRef}>
+          <div style={{ position: "relative" }}>
+            <Search size={14} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--fg-muted)" }} />
+            <input 
+              type="text" 
+              placeholder="Ketik desa atau kota..." 
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (!e.target.value) {
+                   setSelectedCoords(null);
+                   setLocationName("");
+                   setWeatherData(null);
+                }
+              }}
+              onFocus={() => {
+                if (suggestions.length > 0) setShowDropdown(true);
+              }}
+              style={{ width: "100%", paddingLeft: "34px", height: "36px", border: "1px solid var(--border)", borderRadius: "8px", fontSize: "13px", background: "var(--bg)", outline: "none", color: "var(--fg-dark)" }}
             />
           </div>
 
-          {selectedCoords && (
-            <div style={{ marginTop: "12px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-subtle)", padding: "12px", borderRadius: "8px", border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: "12px", color: "var(--fg-dark)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "2px" }}>
-                  <MapPin size={12} color="var(--fg-muted)" />
-                  <span style={{ fontWeight: 600 }}>{locationName}</span>
+          {/* Dropdown Suggestions */}
+          {showDropdown && suggestions.length > 0 && (
+            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: "4px", background: "white", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", border: "1px solid var(--border)", overflow: "hidden", zIndex: 100 }}>
+              {suggestions.map((loc) => (
+                <div 
+                  key={loc.id}
+                  onClick={() => selectLocation(loc)}
+                  style={{ padding: "10px 12px", cursor: "pointer", borderBottom: "1px solid #f0f0f0", fontSize: "12px", color: "#333", display: "flex", alignItems: "center", gap: "8px" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                >
+                  <MapPin size={12} color="#888" />
+                  <span>{getFullName(loc)}</span>
                 </div>
-                <span style={{ color: "var(--fg-muted)" }}>{selectedCoords.lat.toFixed(4)}, {selectedCoords.lon.toFixed(4)}</span>
-              </div>
-              <button 
-                onClick={fetchWeather}
-                disabled={loading}
-                style={{ background: "var(--fg-dark)", color: "white", padding: "8px 16px", borderRadius: "6px", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 600 }}
-              >
-                {loading ? "Memuat..." : "Next"} <ChevronRight size={14} />
-              </button>
+              ))}
             </div>
           )}
         </div>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-          <button 
-            onClick={() => setStep(1)}
-            style={{ background: "transparent", border: "none", display: "flex", alignItems: "center", gap: "4px", color: "var(--fg-muted)", cursor: "pointer", fontSize: "12px", padding: 0, marginBottom: "16px", fontWeight: 600 }}
-          >
-            <ArrowLeft size={14} /> Kembali ke Peta
-          </button>
 
+        {/* Map Container */}
+        <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", flex: 1, minHeight: "300px", zIndex: 1 }}>
+          <iframe
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=k&z=${weatherData ? 15 : (mapQuery === 'Indonesia' ? 5 : 12)}&ie=UTF8&iwloc=&output=embed`}
+            style={{ width: "100%", height: "100%", border: "none", position: "absolute", inset: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+
+          {/* Weather Overlay */}
           {weatherData && (
-            <div style={{ 
-              position: "relative",
-              overflow: "hidden",
-              background: "white", 
-              borderRadius: "12px", 
-              border: "1px solid var(--border)", 
-              display: "flex", 
-              flexDirection: "column", 
-              alignItems: "center", 
-              flex: 1, 
-              justifyContent: "center" 
-            }}>
-              {/* Absolute Background Scene */}
-              <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+            <>
+              {/* Scene Background over Map */}
+              <div style={{ position: "absolute", inset: 0, zIndex: 2, opacity: 0.85, pointerEvents: "none" }}>
                 {getScene(weatherData.weather_code)}
               </div>
 
-              {/* Content Overlay */}
-              <div style={{ position: "relative", zIndex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", height: "100%", justifyContent: "center" }}>
-                <div style={{ fontSize: "12px", color: "var(--fg-muted)", marginBottom: "16px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
-                  <MapPin size={14} /> {locationName || `${selectedCoords?.lat.toFixed(4)}, ${selectedCoords?.lon.toFixed(4)}`}
-                </div>
-                
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-                  {getWeatherIcon(weatherData.weather_code)}
-                  <div style={{ fontSize: "32px", fontWeight: 800, color: "var(--fg-dark)", lineHeight: 1 }}>
-                    {weatherData.temperature_2m}°C
+              {/* Weather Data Glass Card */}
+              <div style={{ position: "absolute", inset: 0, zIndex: 3, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", pointerEvents: "none" }}>
+                <div style={{ 
+                  background: "rgba(255, 255, 255, 0.7)", 
+                  backdropFilter: "blur(8px)", 
+                  padding: "24px", 
+                  borderRadius: "16px", 
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.1)", 
+                  display: "flex", 
+                  flexDirection: "column", 
+                  alignItems: "center",
+                  minWidth: "240px",
+                  border: "1px solid rgba(255,255,255,0.4)",
+                  pointerEvents: "auto"
+                }}>
+                  <div style={{ fontSize: "12px", color: "var(--fg-muted)", marginBottom: "16px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px", textAlign: "center" }}>
+                    <MapPin size={14} /> {locationName || `${selectedCoords?.lat.toFixed(4)}, ${selectedCoords?.lon.toFixed(4)}`}
                   </div>
-                  <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--fg-muted)" }}>
-                    {getWeatherDesc(weatherData.weather_code)}
+                  
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
+                    {getWeatherIcon(weatherData.weather_code)}
+                    <div style={{ fontSize: "32px", fontWeight: 800, color: "var(--fg-dark)", lineHeight: 1 }}>
+                      {weatherData.temperature_2m}°C
+                    </div>
+                    <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--fg-muted)" }}>
+                      {getWeatherDesc(weatherData.weather_code)}
+                    </div>
                   </div>
-                </div>
 
-                <div style={{ display: "flex", gap: "24px", width: "100%", justifyContent: "center", borderTop: "1px solid var(--border)", paddingTop: "16px" }}>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                    <Wind size={16} color="var(--fg-muted)" />
-                    <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.wind_speed_10m} km/j</span>
+                  <div style={{ display: "flex", gap: "24px", width: "100%", justifyContent: "center", borderTop: "1px solid rgba(0,0,0,0.1)", paddingTop: "16px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+                      <Wind size={16} color="var(--fg-muted)" />
+                      <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.wind_speed_10m} km/j</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+                      <Droplets size={16} color="var(--fg-muted)" />
+                      <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.relative_humidity_2m}%</span>
+                    </div>
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                    <Droplets size={16} color="var(--fg-muted)" />
-                    <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}>{weatherData.relative_humidity_2m}%</span>
-                  </div>
+
+                  <button 
+                    onClick={() => setWeatherData(null)} 
+                    style={{ marginTop: "20px", background: "rgba(0,0,0,0.05)", border: "none", padding: "8px 16px", borderRadius: "8px", cursor: "pointer", fontSize: "12px", fontWeight: 600, color: "var(--fg-dark)" }}
+                  >
+                    Tutup
+                  </button>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
-      )}
+
+        {/* Selected Location Controls - Show if weather is not currently showing */}
+        {selectedCoords && !weatherData && (
+          <div style={{ marginTop: "12px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-subtle)", padding: "12px", borderRadius: "8px", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: "12px", color: "var(--fg-dark)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "2px" }}>
+                <MapPin size={12} color="var(--fg-muted)" />
+                <span style={{ fontWeight: 600 }}>{locationName}</span>
+              </div>
+              <span style={{ color: "var(--fg-muted)" }}>{selectedCoords.lat.toFixed(4)}, {selectedCoords.lon.toFixed(4)}</span>
+            </div>
+            <button 
+              onClick={fetchWeather}
+              disabled={loading}
+              style={{ background: "var(--fg-dark)", color: "white", padding: "8px 16px", borderRadius: "6px", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 600 }}
+            >
+              {loading ? "Memuat..." : "Next"} <ChevronRight size={14} />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
