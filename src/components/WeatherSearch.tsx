@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Search, MapPin, Cloud, CloudRain, Sun, CloudLightning, Wind, Droplets, ChevronRight, ArrowLeft } from "lucide-react";
+import { getScene } from "./WeatherWidget";
 
 export default function WeatherSearch() {
   const [query, setQuery] = useState("");
