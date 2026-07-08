@@ -218,9 +218,9 @@ export default function DashboardClient() {
             </div>
           </div>
           
-          <div style={{ flex: 1, height: "300px", minHeight: "260px" }}>
+          <div style={{ width: "100%", height: "300px" }}>
             {ready ? (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={lineData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                   <XAxis 
