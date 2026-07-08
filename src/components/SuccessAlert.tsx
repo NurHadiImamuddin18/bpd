@@ -33,11 +33,11 @@ export default function SuccessAlert({ message }: SuccessAlertProps) {
       <p style={{
         margin: 0,
         fontSize: "12px",
-        color: "#1a1a1aff",
+        color: "#000000ff",
         lineHeight: "1.5",
       }}>
         <strong style={{ fontWeight: 500 }}>Data Saved Successfully!</strong>{" "}
-        <span style={{ color: "rgba(0, 0, 0, 1)ff" }}>{message}</span>
+        <span style={{ color: "rgba(25, 25, 25, 1)ff" }}>{message}</span>
       </p>
     </div>
   );
